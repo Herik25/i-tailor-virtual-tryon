@@ -1,0 +1,460 @@
+@font-face {
+    font-family: 'Sakkal Majalla';
+    src: url('./fonts/majalla.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --primary-color: #2EB2E2;
+    --text-color: #4A3728;
+    --subtext-color: #5C4B3E;
+    --bg-overlay: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: 'Sakkal Majalla', serif;
+    background-image: url('bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    height: 100vh;
+    color: var(--text-color);
+    overflow: hidden;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.5rem;
+}
+
+.close-container {
+    position: absolute;
+    top: 2.5rem;
+    left: 2.5rem;
+}
+
+.logo-container {
+    position: absolute;
+    top: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    letter-spacing: 0.5px;
+    color: #482A18;
+    font-family: 'Proxima Nova', sans-serif;
+}
+
+#close-btn {
+    background: transparent;
+    border: 1.5px solid #482A183D;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: var(--text-color);
+}
+
+#close-btn:hover {
+    background-color: rgba(74, 55, 40, 0.05);
+    border-color: var(--text-color);
+}
+
+.logo-main {
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+.logo-main sup {
+    font-size: 0.6rem;
+    top: -0.8em;
+    margin-left: 2px;
+}
+
+.logo-sub {
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+.content {
+    max-width: 800px;
+    width: 100%;
+}
+
+.main-title {
+    font-size: 6rem;
+    line-height: 88%;
+    margin-bottom: 1rem;
+    font-weight: 400;
+    letter-spacing: -0.5px;
+}
+
+.secondary-title {
+    font-size: 4.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.sub-text {
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 125%;
+    color: var(--text-color);
+    letter-spacing: 0.2px;
+    font-family: 'Proxima Nova', sans-serif;
+}
+
+#create-btn, #capture-btn {
+    background-color: var(--primary-color);
+    border: none;
+    color: white;
+    padding: 1rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#create-btn:hover, #capture-btn:hover {
+    transform: translateY(-2px);
+}
+
+#create-btn:active, #capture-btn:active {
+    transform: translateY(0);
+}
+
+/* Camera Styles */
+.capture-content {
+    max-width: 900px;
+}
+
+.camera-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 1 / 1;
+    margin: 0 auto 2.5rem;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+#video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+}
+
+.face-guide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.face-oval {
+    position: relative;
+    width: 60%;
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.face-oval svg {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.camera-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+}
+
+/* .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(46, 178, 226, 0.1);
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+} */
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Processing Overlay */
+.processing-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    color: white;
+    backdrop-filter: blur(8px);
+    transition: opacity 0.5s ease;
+}
+
+.circular-progress {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    margin-bottom: 1.5rem;
+}
+
+.circular-progress svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.circular-progress circle {
+    fill: none;
+    stroke-width: 5;
+    stroke-linecap: round;
+}
+
+.circular-progress circle.bg {
+    stroke: rgba(255, 255, 255, 0.15);
+}
+
+.circular-progress circle.fg {
+    stroke: white;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset 0.3s ease;
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+
+#loadingMsg {
+    font-size: 1rem;
+    font-family: 'Proxima Nova', sans-serif;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+}
+
+/* Result Page Styles */
+.result-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background-image: url('bg.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.result-left {
+    flex: 1;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.result-left #close-btn {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+}
+
+.result-content {
+    /* max-width: 500px; */
+    margin-left: 2rem;
+}
+
+.result-title {
+    font-size: 5rem;
+    line-height: 96%;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-weight: 400;
+}
+
+.result-text {
+    font-size: 1.125rem;
+    line-height: 125%;
+    color: var(--subtext-color);
+    margin-bottom: 2.5rem;
+    font-family: 'Proxima Nova', sans-serif;
+}
+
+.shop-btn {
+    display: inline-block;
+    padding: 0.75rem 2.5rem;
+    border: 1.5px solid var(--text-color);
+    background: transparent;
+    color: var(--text-color);
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.shop-btn:hover {
+    background: var(--text-color);
+    color: white;
+}
+
+.result-right {
+    flex: 1;
+    position: relative;
+}
+
+.result-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+@media (max-width: 900px) {
+    .result-container {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+    
+    .result-left {
+        padding: 2rem;
+        min-height: 50vh;
+    }
+    
+    .result-right {
+        min-height: 70vh;
+    }
+    
+    .result-title {
+        font-size: 3.5rem;
+    }
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .logo-main {
+        font-size: 1.2rem;
+    }
+    
+    .logo-sub {
+        font-size: 0.9rem;
+    }
+    
+    .main-title {
+        margin-bottom: 0.7rem;
+        font-size: 5rem;
+    }
+
+    .secondary-title {
+        font-size: 3.5rem;
+    }
+
+    .sub-text {
+        font-size: 0.9rem;
+    }
+    
+    .sub-text {
+        margin-bottom: 2rem;
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-title {
+        font-size: 3rem;
+    }
+
+    .sub-text {
+        font-size: 0.8rem;
+    }
+    
+    .secondary-title {
+        font-size: 2.2rem;
+    }
+
+    .camera-container {
+        max-width: 90vw;
+    }
+
+    .face-oval {
+        width: 65%;
+        height: 75%;
+    }
+    
+    #create-btn, #capture-btn {
+        width: 100%;
+        padding: 1.2rem;
+    }
+}
