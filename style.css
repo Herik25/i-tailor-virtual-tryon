@@ -484,6 +484,12 @@ main {
     .result-container {
         flex-direction: column;
         overflow-y: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    .result-container::-webkit-scrollbar {
+        display: none;
     }
     
     .result-left {

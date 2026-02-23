@@ -4,14 +4,14 @@ const GEMINI_API_KEY = "AIzaSyDZiMhC7vJ6eD9N4e-7HAq5eanunxzafMY";
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 const materials = [
-    { name: "Black Suit", file: "materials/Black Suit.jpg" },
-    { name: "Olive Suit", file: "materials/Olive Suit.jpg" },
-    { name: "Dark Navy", file: "materials/Dark Navy.jpg" },
-    { name: "Light Navy", file: "materials/Light Navy.jpg" },
-    { name: "Brown Suit", file: "materials/BROWN Suit.jpg" },
-    { name: "Textured Light Gray", file: "materials/Textured Light Gray.jpg" },
-    { name: "Textured Gray", file: "materials/Textured Grey.jpg" },
-    { name: "Textured Medium Gray", file: "materials/Textured Medium Grey.jpg" }
+    { name: "Black Suit", file: "materials/Black Suit.jpg", price: 239, originalPrice: 259, promo: true, color: "black", fabricNo: "BK-001", pattern: "Solid", season: "All Season" },
+    { name: "Olive Suit", file: "materials/Olive Suit.jpg", price: 239, originalPrice: 259, promo: true, color: "olive", fabricNo: "OL-002", pattern: "Solid", season: "Summer" },
+    { name: "Dark Navy", file: "materials/Dark Navy.jpg", price: 259, color: "navy", fabricNo: "NV-003", pattern: "Solid", season: "All Season" },
+    { name: "Light Navy", file: "materials/Light Navy.jpg", price: 259, color: "blue", fabricNo: "LB-004", pattern: "Solid", season: "Summer" },
+    { name: "Brown Suit", file: "materials/BROWN Suit.jpg", price: 259, color: "brown", fabricNo: "BR-005", pattern: "Solid", season: "Winter" },
+    { name: "Textured Light Gray", file: "materials/Textured Light Gray.jpg", price: 259, color: "gray", fabricNo: "GR-006", pattern: "Textured", season: "Winter" },
+    { name: "Textured Gray", file: "materials/Textured Grey.jpg", price: 259, color: "gray", fabricNo: "GR-007", pattern: "Textured", season: "All Season" },
+    { name: "Textured Medium Gray", file: "materials/Textured Medium Grey.jpg", price: 259, color: "gray", fabricNo: "GR-008", pattern: "Textured", season: "All Season" }
 ];
 
 let selectedMaterial = null;
@@ -27,30 +27,130 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalLoader = document.getElementById('modalLoader');
     const shareLinkBtn = document.getElementById('shareLinkBtn');
 
-    // Load initial image
     const generatedData = localStorage.getItem('generatedLook');
     if (generatedData) {
         resultImg.src = `data:image/png;base64,${generatedData}`;
     }
 
-    // Inject materials
-    materials.forEach(mat => {
-        const card = document.createElement('div');
-        card.className = 'material-card';
-        card.innerHTML = `
-            <div class="material-thumb" style="background-image: url('${mat.file}')"></div>
-            <div class="material-name">${mat.name}</div>
-        `;
-        card.onclick = () => {
-            document.querySelectorAll('.material-card').forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-            selectedMaterial = mat;
-            confirmBtn.disabled = false;
+    let currentFilters = {
+        color: 'all',
+        search: '',
+        pattern: 'all',
+        season: 'all'
+    };
+
+    function renderMaterials() {
+        materialGrid.innerHTML = '';
+        const filtered = materials.filter(mat => {
+            const matchesColor = currentFilters.color === 'all' || mat.color === currentFilters.color;
+            const matchesSearch = mat.fabricNo.toLowerCase().includes(currentFilters.search.toLowerCase()) || 
+                                mat.name.toLowerCase().includes(currentFilters.search.toLowerCase());
+            const matchesPattern = currentFilters.pattern === 'all' || mat.pattern === currentFilters.pattern;
+            const matchesSeason = currentFilters.season === 'all' || mat.season === currentFilters.season;
+            
+            return matchesColor && matchesSearch && matchesPattern && matchesSeason;
+        });
+
+        if (filtered.length === 0) {
+            materialGrid.innerHTML = '<div class="no-results">No fabrics match your selection.</div>';
+            return;
+        }
+
+        filtered.forEach(mat => {
+            const card = document.createElement('div');
+            card.className = `material-card ${selectedMaterial === mat ? 'selected' : ''}`;
+            const promoHtml = mat.promo ? `<div class="promo-ribbon">PROMO</div>` : '';
+            const priceHtml = mat.originalPrice 
+                ? `<span class="original-price">$${mat.originalPrice}</span> <span class="current-price sale">$${mat.price}</span>`
+                : `<span class="current-price">$${mat.price}</span>`;
+
+            card.innerHTML = `
+                <div class="material-thumb" style="background-image: url('${mat.file}')">
+                    ${promoHtml}
+                    <div class="material-info-overlay">
+                        <div class="material-name-overlay">${mat.name}</div>
+                        <div class="material-price-overlay">${priceHtml}</div>
+                    </div>
+                </div>
+            `;
+            card.onclick = () => {
+                document.querySelectorAll('.material-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedMaterial = mat;
+                confirmBtn.disabled = false;
+            };
+            materialGrid.appendChild(card);
+        });
+    }
+
+    renderMaterials();
+
+    document.querySelectorAll('.swatch').forEach(swatch => {
+        swatch.onclick = () => {
+            document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+            swatch.classList.add('active');
+            currentFilters.color = swatch.dataset.color;
+            renderMaterials();
         };
-        materialGrid.appendChild(card);
     });
 
-    // Modal Controls
+    function initCustomSelect(selectId, filterKey) {
+        const select = document.getElementById(selectId);
+        const trigger = select.querySelector('.select-trigger');
+        const triggerText = trigger.querySelector('span');
+        const options = select.querySelectorAll('.option');
+
+        trigger.onclick = (e) => {
+            e.stopPropagation();
+            document.querySelectorAll('.custom-select').forEach(s => {
+                if (s !== select) s.classList.remove('open');
+            });
+            select.classList.toggle('open');
+        };
+
+        options.forEach(opt => {
+            opt.onclick = () => {
+                const value = opt.dataset.value;
+                const text = opt.innerText;
+                
+                triggerText.innerText = text;
+                currentFilters[filterKey] = value;
+                
+                options.forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+                
+                select.classList.remove('open');
+                renderMaterials();
+            };
+        });
+    }
+
+    initCustomSelect('patternSelect', 'pattern');
+    initCustomSelect('seasonSelect', 'season');
+
+    window.addEventListener('click', () => {
+        document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('open'));
+    });
+
+    document.getElementById('fabricSearch').oninput = (e) => {
+        currentFilters.search = e.target.value;
+        renderMaterials();
+    };
+
+    const advancedSearchToggle = document.getElementById('advancedSearchToggle');
+    const filtersContainer = document.getElementById('filtersContainer');
+
+    advancedSearchToggle.onclick = () => {
+        const isActive = filtersContainer.classList.contains('active');
+        if (isActive) {
+            filtersContainer.classList.remove('active');
+            advancedSearchToggle.classList.remove('active');
+        } else {
+            filtersContainer.classList.add('active');
+            advancedSearchToggle.classList.add('active');
+        }
+    };
+
     openModalBtn.onclick = (e) => {
         e.preventDefault();
         materialModal.classList.add('active');
@@ -61,6 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.material-card').forEach(c => c.classList.remove('selected'));
         selectedMaterial = null;
         confirmBtn.disabled = true;
+        
+        filtersContainer.classList.remove('active');
+        advancedSearchToggle.classList.remove('active');
     };
 
     closeModalBtn.onclick = closePopup;

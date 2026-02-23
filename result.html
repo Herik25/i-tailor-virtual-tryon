@@ -49,16 +49,80 @@
     <!-- Material Selector Modal -->
     <div id="materialModal" class="modal-overlay">
         <div class="modal-container">
-            <div class="modal-header">
-                <div class="modal-title-group">
-                    <h2>Select Fabric</h2>
-                    <p>Experience our premium range of bespoke suit materials</p>
+            <div class="modal-header-container">
+                <div class="modal-header">
+                    <div class="modal-title-group">
+                        <h2>Select Fabric</h2>
+                        <p>Experience our premium range of bespoke suit materials</p>
+                    </div>
+                    <button class="modal-close" id="closeModal">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.75729 17.2426L11.9999 12M17.2426 6.75736L11.9999 12M11.9999 12L6.75729 6.75736M11.9999 12L17.2426 17.2426" stroke="#482A18" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
                 </div>
-                <button class="modal-close" id="closeModal">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6.75729 17.2426L11.9999 12M17.2426 6.75736L11.9999 12M11.9999 12L6.75729 6.75736M11.9999 12L17.2426 17.2426" stroke="#482A18" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
+                <div>
+                    <div class="advanced-search-toggle" id="advancedSearchToggle">
+                    <span>Advanced Search</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                
+                <div class="modal-filters-container" id="filtersContainer">
+                    <div class="modal-filters">
+                        <div class="filter-row main-filters">
+                            <div class="filter-group color-filter">
+                                <label>Color:</label>
+                                <div class="color-swatches" id="colorFilter">
+                                    <button class="swatch all active" data-color="all">All</button>
+                                    <button class="swatch black" data-color="black"></button>
+                                    <button class="swatch navy" data-color="navy"></button>
+                                    <button class="swatch blue" data-color="blue"></button>
+                                    <button class="swatch olive" data-color="olive"></button>
+                                    <button class="swatch brown" data-color="brown"></button>
+                                    <button class="swatch gray" data-color="gray"></button>
+                                </div>
+                            </div>
+                            <div class="filter-group dropdown-filter">
+                                <label>Patterns:</label>
+                                <div class="custom-select" id="patternSelect">
+                                    <div class="select-trigger">
+                                        <span>All</span>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                    </div>
+                                    <div class="select-options">
+                                        <div class="option active" data-value="all">All</div>
+                                        <div class="option" data-value="Solid">Solid</div>
+                                        <div class="option" data-value="Textured">Textured</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-group dropdown-filter">
+                                <label>Season:</label>
+                                <div class="custom-select" id="seasonSelect">
+                                    <div class="select-trigger">
+                                        <span>Four Season</span>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                    </div>
+                                    <div class="select-options">
+                                        <div class="option active" data-value="all">Four Season</div>
+                                        <div class="option" data-value="All Season">All Season</div>
+                                        <div class="option" data-value="Summer">Summer</div>
+                                        <div class="option" data-value="Winter">Winter</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="search-row">
+                            <div class="filter-group search-filter">
+                                <label>Search:</label>
+                                <div class="search-input-wrapper">
+                                    <input type="text" id="fabricSearch" placeholder="Find fabric by number or name...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
             </div>
             <div class="modal-body">
                 <div class="material-grid" id="materialGrid">
