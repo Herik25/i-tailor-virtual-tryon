@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="iTailor - Preview Your Bespoke Look">
+    <title>iTailor | Your Preview</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .preview-page {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0a0a0a;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preview-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('bg.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3;
+            filter: blur(10px);
+            z-index: 1;
+        }
+
+        .preview-card {
+            position: relative;
+            z-index: 2;
+            width: 90%;
+            max-width: 600px;
+            aspect-ratio: 2/3;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: cardAppear 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        @keyframes cardAppear {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-header {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 10;
+        }
+
+        .logo-preview {
+            color: white;
+            font-family: 'Proxima Nova', sans-serif;
+            letter-spacing: 2px;
+            font-size: 1.2rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .preview-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.6));
+            color: white;
+            text-align: center;
+        }
+
+        .preview-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.8rem 2rem;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .preview-btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-page">
+        <div class="preview-bg"></div>
+        <div class="preview-card">
+            <div class="preview-header">
+                <div class="logo-preview">iTAILOR<sup>&reg;</sup></div>
+            </div>
+            <img id="previewImg" src="suit-base.png" alt="Your Shared Look" class="preview-img">
+            <div class="preview-footer">
+                <h3>Bespoke Masterpiece</h3>
+                <p>Designed and generated with AI precision.</p>
+                <a href="index.html" class="preview-btn">CREATE YOUR OWN</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const previewImg = document.getElementById('previewImg');
+            const data = localStorage.getItem('generatedLook');
+            if (data) {
+                previewImg.src = `data:image/png;base64,${data}`;
+            }
+        });
+    </script>
+</body>
+</html>

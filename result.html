@@ -26,17 +26,23 @@
             </div>
         </div>
         <div class="result-right">
-            <img id="finalGeneratedImage" src="suit-base.png" alt="Your Fresh Look" class="result-image">
-            <div id="pageLoader" class="processing-overlay hidden">
-                <div class="circular-progress">
-                    <svg viewBox="0 0 100 100">
-                        <circle class="bg" cx="50" cy="50" r="45"></circle>
-                        <circle class="fg" cx="50" cy="50" r="45"></circle>
-                    </svg>
-                    <div id="progressPercent" class="progress-text">0%</div>
+            <div class="image-wrapper">
+                <img id="finalGeneratedImage" src="suit-base.png" alt="Your Fresh Look" class="result-image">
+                <div class="share-container">
+                    <button id="shareLinkBtn" class="share-link-btn">SHARE</button>
                 </div>
-                <p id="loadingMsg">Regenerating your look...</p>
+                <div id="pageLoader" class="processing-overlay hidden">
+                    <div class="circular-progress">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="fg" cx="50" cy="50" r="45"></circle>
+                        </svg>
+                        <div id="progressPercent" class="progress-text">0%</div>
+                    </div>
+                    <p id="loadingMsg">Regenerating your look...</p>
+                </div>
             </div>
+            <div id="toast" class="toast hidden">Link copied to clipboard</div>
         </div>
     </div>
 

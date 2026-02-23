@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const materialModal = document.getElementById('materialModal');
     const materialGrid = document.getElementById('materialGrid');
     const modalLoader = document.getElementById('modalLoader');
+    const shareLinkBtn = document.getElementById('shareLinkBtn');
 
     // Load initial image
     const generatedData = localStorage.getItem('generatedLook');
@@ -80,6 +81,22 @@ document.addEventListener('DOMContentLoaded', () => {
         } finally {
             modalLoader.classList.remove('active');
             confirmBtn.disabled = false;
+        }
+    };
+
+    shareLinkBtn.onclick = async () => {
+        try {
+            const shareUrl = `${window.location.origin}/preview.html`;
+            await navigator.clipboard.writeText(shareUrl);
+            
+            const toast = document.getElementById('toast');
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 2500);
+        } catch (err) {
+            console.error('Failed to copy: ', err);
         }
     };
 
