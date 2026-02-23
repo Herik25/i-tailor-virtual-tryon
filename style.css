@@ -176,6 +176,30 @@ main {
     transform: scaleX(-1);
 }
 
+.camera-blur-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(6px);
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 4;
+    pointer-events: none;
+    --mask-oval: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 321 449'%3E%3Cpath d='M318.344 201.98C318.344 242.752 308.31 288.676 291.079 320.305C279.46 341.63 259.129 385.863 243.05 400.407C218.332 422.766 194.881 446.864 160.104 446.864C125.328 446.864 101.877 422.766 77.1592 400.407C61.0798 385.863 40.7483 341.63 29.1302 320.305C11.8987 288.676 1.86432 242.752 1.86432 201.98C1.86432 157.326 7.45763 105.62 27.802 72.3275C57.8115 23.2181 105.9 1.86432 160.104 1.86432C214.309 1.86432 262.397 23.2181 292.407 72.3275C312.751 105.62 318.344 157.326 318.344 201.98Z' fill='black'/%3E%3C/svg%3E");
+    --mask-bg: linear-gradient(#000, #000);
+    -webkit-mask-image: var(--mask-oval), var(--mask-bg);
+    -webkit-mask-size: 60% 80%, 100% 100%;
+    -webkit-mask-position: center, center;
+    -webkit-mask-repeat: no-repeat, no-repeat;
+    -webkit-mask-composite: destination-out;
+    mask-image: var(--mask-oval), var(--mask-bg);
+    mask-size: 60% 80%, 100% 100%;
+    mask-position: center, center;
+    mask-repeat: no-repeat, no-repeat;
+    mask-composite: exclude;
+}
+
 .face-guide {
     position: absolute;
     top: 0;
