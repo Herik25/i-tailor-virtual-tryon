@@ -152,7 +152,24 @@ main {
     transform: translateY(0);
 }
 
-/* Camera Styles */
+.capture-input {
+    margin-top: 1rem;
+}
+
+.gallery-link {
+    color: #482A18;
+    text-decoration: underline;
+    font-size: 1.1rem;
+    font-family: 'Proxima Nova', sans-serif;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    text-underline-offset: 4px;
+}
+
+.gallery-link:hover {
+    opacity: 0.7;
+}
+
 .capture-content {
     max-width: 900px;
 }
@@ -162,7 +179,7 @@ main {
     width: 100%;
     max-width: 500px;
     aspect-ratio: 1 / 1;
-    margin: 0 auto 2.5rem;
+    margin: 0 auto 1.5rem;
     border-radius: 20px;
     overflow: hidden;
     background-color: #000;
@@ -261,7 +278,6 @@ main {
     display: none !important;
 }
 
-/* Processing Overlay */
 .processing-overlay {
     position: absolute;
     top: 0;
@@ -523,7 +539,6 @@ main {
 }
 
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .logo-main {
         font-size: 1.2rem;

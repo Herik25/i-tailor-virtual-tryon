@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-const GEMINI_API_KEY = "AIzaSyDZiMhC7vJ6eD9N4e-7HAq5eanunxzafMY"; 
+const GEMINI_API_KEY = "AIzaSyB_l3qOaLPV6E-xwEHgK9_4nvvZwzsYHx0"; 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 const state = {
@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressPercent = document.getElementById('progressPercent');
     const loadingMsg = document.getElementById('loadingMsg');
     const fgCircle = processingOverlay.querySelector('.fg');
+    const galleryInput = document.getElementById('gallery-input');
+    const galleryLink = document.getElementById('gallery-link');
+    const galleryPreview = document.getElementById('gallery-preview');
 
     function setProgress(percent) {
         const radius = 45;
@@ -35,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Load suit-base image on startup
     async function loadSuitBase() {
         try {
             const response = await fetch("suit-base.png");
@@ -51,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Initialize Webcam
     async function initWebcam() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -78,6 +79,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadSuitBase();
     initWebcam();
+
+    galleryLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        if (galleryPreview.style.display === 'block') {
+            galleryPreview.style.display = 'none';
+            galleryPreview.src = '';
+            video.style.display = 'block';
+            video.play();
+            state.capturedImageBase64 = null;
+            galleryLink.textContent = 'Upload from Gallery';
+            galleryInput.value = '';
+        } else {
+            galleryInput.click();
+        }
+    });
+
+    galleryInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                galleryPreview.src = event.target.result;
+                galleryPreview.style.display = 'block';
+                video.style.display = 'none';
+                video.pause();
+                
+                galleryLink.textContent = 'Return to Camera';
+                
+                state.capturedImageBase64 = event.target.result.replace(
+                    /^data:image\/(png|jpeg|jpg);base64,/,
+                    ""
+                );
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 
     async function decodeFace(base64Image) {
         const prompt = `Analyze this image and return a JSON object with strictly these 4 keys: 
@@ -117,7 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
     async function generateSuitPreview(metadata, suitType) {
         if (!state.suitBaseBase64) throw new Error("Suit base missing");
 
-        // Format metadata values to ensure they are readable strings for the prompt
         const formatVal = (val) => {
             if (typeof val === 'object' && val !== null) {
                 return Object.entries(val).map(([k, v]) => `${k}: ${v}`).join(", ");
@@ -190,7 +227,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Capture functionality
     captureBtn.addEventListener('click', async () => {
         if (!video.videoWidth) return;
 
@@ -198,18 +234,18 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         
-        // Flash effect
         const flash = document.createElement('div');
         flash.setAttribute('style', 'position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:9999;opacity:0.8;transition:opacity 0.3s');
         document.body.appendChild(flash);
         setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => document.body.removeChild(flash), 300); }, 50);
-
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageData = canvas.toDataURL('image/jpeg', 0.8);
-        state.capturedImageBase64 = imageData.replace(
-            /^data:image\/jpeg;base64,/,
-            "",
-        );
+        if (!state.capturedImageBase64) {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = canvas.toDataURL('image/jpeg', 0.8);
+            state.capturedImageBase64 = imageData.replace(
+                /^data:image\/jpeg;base64,/,
+                "",
+            );
+        }
         video.pause();
         
         processingOverlay.classList.remove('hidden');
@@ -220,12 +256,9 @@ document.addEventListener('DOMContentLoaded', () => {
         captureBtn.style.opacity = '0.5';
 
         try {
-            // Step 1: Decode Face
             await decodeFace(state.capturedImageBase64);
             setProgress(40);
             loadingMsg.textContent = "Generating your look...";
-
-            // Step 2: Generate Look
             await generateSuitPreview(state.metadata, "standard charcoal slim-fit");
             setProgress(100);
             

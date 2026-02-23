@@ -396,7 +396,6 @@
     box-shadow: 0 0 0 2px var(--primary-color), 0 15px 40px rgba(0,0,0,0.2);
 }
 
-/* Info Overlay */
 .material-info-overlay {
     position: absolute;
     top: 0;
@@ -459,7 +458,6 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
-/* Modal Footer */
 .modal-footer {
     padding: 1.5rem 2.5rem;
     border-top: 1px solid rgba(74, 55, 40, 0.1);
@@ -501,7 +499,6 @@
     transform: translateY(-2px);
 }
 
-/* Loading State in Modal */
 .modal-loading-overlay {
     position: absolute;
     top: 0;

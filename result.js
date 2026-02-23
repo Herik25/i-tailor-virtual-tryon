@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-const GEMINI_API_KEY = "AIzaSyDZiMhC7vJ6eD9N4e-7HAq5eanunxzafMY";
+const GEMINI_API_KEY = "AIzaSyB_l3qOaLPV6E-xwEHgK9_4nvvZwzsYHx0";
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 const materials = [
@@ -214,26 +214,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function regenerateLook(material) {
-        const currentGeneratedLook = localStorage.getItem('generatedLook');
-
-        if (!currentGeneratedLook) {
-            throw new Error("No previous generation found.");
+        const capturedImage = localStorage.getItem('capturedImageBase64');
+        const suitBase = localStorage.getItem('suitBaseBase64');
+        const metadataString = localStorage.getItem('metadata');
+        
+        if (!capturedImage || !suitBase) {
+            throw new Error("Missing original capture data. Please recapture.");
         }
 
+        const metadata = JSON.parse(metadataString || '{}');
         const materialBase64 = await getBase64FromUrl(material.file);
-        // if only want to update the only suit jacket or lapels add this in first requriement first word "ONLY update the suit jacket and lapels."
+        
+        // Format metadata for the prompt
+        const formatVal = (val) => {
+            if (typeof val === 'object' && val !== null) {
+                return Object.entries(val).map(([k, v]) => `${k}: ${v}`).join(", ");
+            }
+            return val || "Not specified";
+        };
+
         const finalPrompt = `
-            This is a high-end luxury fashion portrait. 
-            Instruction: CHANGE the current suit material of the person in the provided portrait to the specific fabric shown in the reference swatch.
+            Ultra realistic 8k portrait for a luxury virtual try-on.
             
-            REFERENCE SWATCH: The material/fabric to apply.
-            INPUT PORTRAIT: The person whose suit needs to be updated.
+            Inputs:
+            - IMAGE 1 (Base Template): A professional male model in a suit.
+            - IMAGE 2 (Identity): The target user's face and head.
+            - IMAGE 3 (Material Swatch): The fabric to be applied to the suit.
             
-            CRITICAL REQUIREMENTS:
-            - Match the texture, weave, and color of the REFERENCE SWATCH perfectly.
-            - You MUST preserve the person's face, features, hair, identity, posture, and expression EXACTLY as they appear in the INPUT PORTRAIT.
-            - KEEP the background, lighting, and overall composition identical to the INPUT PORTRAIT.
-            - Focus on creating a realistic, high-quality fabric transition that follows the folds and lighting of the original suit.
+            Instructions:
+            1. Replace the model's head in IMAGE 1 with the head from IMAGE 2. Preserve identity exactly.
+            2. Apply the specific fabric from IMAGE 3 to the suit in IMAGE 1.
+            3. Match the texture and lighting perfectly.
+            4. Keep the background and pose from IMAGE 1.
+            
+            Technical metadata for face matching:
+            Skin/Model: ${formatVal(metadata.MODEL)}
+            Face: ${formatVal(metadata.FACE)}
+            Hair: ${formatVal(metadata.DETAILS)}
+            Grooming: ${formatVal(metadata.FACIAL_HAIR)}
             
             Return only the updated photographic result.
         `.trim();
@@ -249,20 +267,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const parts = [
             { text: finalPrompt },
-            { text: "REFERENCE SWATCH:" },
-            { 
-                inlineData: { 
-                    mimeType: "image/jpeg", 
-                    data: materialBase64 
-                } 
-            },
-            { text: "INPUT PORTRAIT:" },
-            { 
-                inlineData: { 
-                    mimeType: "image/png", 
-                    data: currentGeneratedLook 
-                } 
-            }
+            { text: "IMAGE 1 (Base Template):" },
+            { inlineData: { mimeType: "image/png", data: suitBase } },
+            { text: "IMAGE 2 (Identity):" },
+            { inlineData: { mimeType: "image/jpeg", data: capturedImage } },
+            { text: "IMAGE 3 (Material Swatch):" },
+            { inlineData: { mimeType: "image/jpeg", data: materialBase64 } }
         ];
 
         const result = await model.generateContent(parts);
