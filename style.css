@@ -373,20 +373,24 @@ main {
     font-family: 'Proxima Nova', sans-serif;
 }
 
+.result-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
 .shop-btn {
     display: inline-block;
     padding: 0.75rem 2.5rem;
     border: 1.5px solid var(--text-color);
     background: transparent;
     color: var(--text-color);
-    font-size: 1.2rem;
-    font-weight: 700;
+    font-size: 1rem;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.3s ease;
     text-decoration: none;
-    margin-right: 1rem;
 }
 
 .shop-btn.inverted {

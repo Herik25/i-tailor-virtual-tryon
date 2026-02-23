@@ -181,6 +181,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (imagePart && imagePart.inlineData.data) {
             localStorage.setItem('generatedLook', imagePart.inlineData.data);
+            localStorage.setItem('capturedImageBase64', state.capturedImageBase64);
+            localStorage.setItem('suitBaseBase64', state.suitBaseBase64);
+            localStorage.setItem('metadata', JSON.stringify(state.metadata));
             window.location.href = 'result.html';
         } else {
             throw new Error("AI tailoring failed to return image.");
