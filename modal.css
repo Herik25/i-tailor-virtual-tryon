@@ -1,4 +1,3 @@
-/* Modal Base Styles */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -22,7 +21,7 @@
 }
 
 .modal-container {
-    background: white;
+    position: relative;
     width: 90%;
     max-width: 800px;
     max-height: 85vh;
@@ -32,9 +31,30 @@
     flex-direction: column;
     transform: translateY(20px);
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    position: relative;
     overflow: hidden;
-    border: 1px solid rgba(74, 55, 40, 0.1);
+}
+
+.modal-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at center, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 80%),
+        url('modal-bg.png');
+    background-size: cover;
+    background-position: center;
+    filter: blur(1px);
+    transform: scale(1.1);
+    opacity: 0.95;
+    z-index: -1;
+}
+
+.modal-header, .modal-body, .modal-footer {
+    position: relative;
+    z-index: 1;
 }
 
 .modal-overlay.active .modal-container {
@@ -108,7 +128,8 @@
     background-position: center;
     margin-bottom: 0.75rem;
     position: relative;
-    box-shadow: inset 0 0 40px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border: 1px solid rgba(74, 55, 40, 0.1);
 }
 
 .material-card:hover .material-thumb {
@@ -136,11 +157,12 @@
 /* Modal Footer */
 .modal-footer {
     padding: 1.5rem 2.5rem;
-    border-top: 1px solid rgba(74, 55, 40, 0.08);
+    border-top: 1px solid rgba(74, 55, 40, 0.1);
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
-    background: #FAFAFA;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
 }
 
 .modal-btn {
@@ -181,7 +203,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
     z-index: 10;
     display: flex;
     flex-direction: column;
