@@ -25,10 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Create button interaction
     createBtn.addEventListener('click', () => {
-        container.style.opacity = '0';
-        container.style.transform = 'scale(1.05)';
-        setTimeout(() => {
-            window.location.href = 'capture.html';
-        }, 500);
+        window.location.href = 'capture.html';
     });
 });

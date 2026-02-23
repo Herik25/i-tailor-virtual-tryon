@@ -16,23 +16,25 @@
                 </svg>
             </button>
             <div class="result-content">
-                <h1 class="result-title">Here's your fresh Look</h1>
-                <p class="result-text">To try on this look, we need to create your personal AI Model. Don't worry, it only takes a moment, and you'll be able to use it again anytime.</p>
-                <a href="#" class="shop-btn">SHOP THIS LOOK</a>
+                <h1 class="result-title">A Preview of Your Bespoke Future</h1>
+                <p class="result-text">Your bespoke look, brought to life. Customize your suit further in our state-of-the-art 3D Designer, share it with friends and family, or explore our most sought-after best-selling styles.</p>
+                <a href="#" class="shop-btn inverted">SHOP THIS LOOK</a>
+                <a href="#" class="shop-btn">CREATE YOUR OWN</a>
             </div>
         </div>
         <div class="result-right">
-            <img src="suit-base.png" alt="Your Fresh Look" class="result-image">
+            <img id="finalGeneratedImage" src="suit-base.png" alt="Your Fresh Look" class="result-image">
         </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const container = document.querySelector('.result-container');
-            container.style.opacity = '0';
-            container.style.transition = 'opacity 1s ease-out';
-            setTimeout(() => {
-                container.style.opacity = '1';
-            }, 100);
+            const resultImg = document.getElementById('finalGeneratedImage');
+            
+            // Load generated image
+            const generatedData = localStorage.getItem('generatedLook');
+            if (generatedData) {
+                resultImg.src = `data:image/png;base64,${generatedData}`;
+            }
         });
     </script>
 </body>

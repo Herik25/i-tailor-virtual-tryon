@@ -125,7 +125,7 @@ main {
 
 .sub-text {
     font-size: 1rem;
-    max-width: 600px;
+    max-width: 650px;
     margin: 0 auto 2rem;
     line-height: 125%;
     color: var(--text-color);
@@ -362,11 +362,22 @@ main {
     cursor: pointer;
     transition: all 0.3s ease;
     text-decoration: none;
+    margin-right: 1rem;
+}
+
+.shop-btn.inverted {
+    background-color: var(--text-color);
+    color: white;
 }
 
 .shop-btn:hover {
     background: var(--text-color);
     color: white;
+}
+
+.shop-btn.inverted:hover {
+    background: transparent;
+    color: var(--text-color);
 }
 
 .result-right {

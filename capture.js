@@ -1,39 +1,27 @@
-// import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-// const GEMINI_API_KEY = "AIzaSyB-BUuv6N2OQYUrztz4fAKMLBOFdEWZ4mg"; 
+const GEMINI_API_KEY = "AIzaSyDZiMhC7vJ6eD9N4e-7HAq5eanunxzafMY"; 
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
-// const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+const state = {
+    capturedImageBase64: null,
+    suitBaseBase64: null,
+    metadata: null
+};
 
-// const state = {
-//     capturedImageBase64: null,
-//     suitBaseBase64: null,
-//     metadata: {
-//         MODEL: "",
-//         FACE: "",
-//         FACIAL_HAIR: "",
-//         DETAILS: ""
-//     }
-// };
+const cleanJSON = (rawString) => {
+  return rawString.replace(/```json|```/g, "").trim();
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     const video = document.getElementById('video');
     const captureBtn = document.getElementById('capture-btn');
     const canvas = document.getElementById('canvas');
     const container = document.querySelector('.container');
-    const loadingOverlay = document.querySelector('.camera-loading');
     const processingOverlay = document.getElementById('processingOverlay');
     const progressPercent = document.getElementById('progressPercent');
+    const loadingMsg = document.getElementById('loadingMsg');
     const fgCircle = processingOverlay.querySelector('.fg');
-
-    // Smooth entry animation
-    container.style.opacity = '0';
-    container.style.transition = 'opacity 0.8s ease-out, transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)';
-    container.style.transform = 'scale(1.02)';
-    
-    setTimeout(() => {
-        container.style.opacity = '1';
-        container.style.transform = 'scale(1)';
-    }, 100);
 
     function setProgress(percent) {
         const radius = 45;
@@ -44,6 +32,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (progressPercent) {
             progressPercent.textContent = `${Math.round(percent)}%`;
+        }
+    }
+
+    // Load suit-base image on startup
+    async function loadSuitBase() {
+        try {
+            const response = await fetch("suit-base.png");
+            const blob = await response.blob();
+            state.suitBaseBase64 = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result.split(",")[1]);
+            reader.readAsDataURL(blob);
+            });
+            console.log("Suit base image loaded successfully.");
+        } catch (err) {
+            console.error("Failed to load suit-base.png:", err);
         }
     }
 
@@ -60,70 +64,174 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             video.srcObject = stream;
             video.onloadedmetadata = () => {
-                loadingOverlay.style.opacity = '0';
-                setTimeout(() => loadingOverlay.style.display = 'none', 300);
+                const cameraLoading = document.querySelector('.camera-loading');
+                if (cameraLoading) {
+                    cameraLoading.style.opacity = '0';
+                    setTimeout(() => cameraLoading.style.display = 'none', 300);
+                }
             };
         } catch (err) {
             console.error('Error accessing webcam:', err);
-            alert('Unable to access camera. Please ensure you have granted permission.');
+            alert('Unable to access camera.');
         }
     }
 
+    loadSuitBase();
     initWebcam();
 
+    async function decodeFace(base64Image) {
+        const prompt = `Analyze this image and return a JSON object with strictly these 4 keys: 
+        - MODEL (Ethnicity, Skin Tone, Age Estimate)
+        - FACE (Face Shape, Jawline, Eye Color)
+        - FACIAL_HAIR (Beard style, Mustache, or Clean Shaven)
+        - DETAILS (Hair style, Glasses, distinctive features)
+        
+        Do not add any other text. Return only valid JSON.`;
+
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+        const parts = [
+            { text: prompt },
+            {
+                inlineData: {
+                    mimeType: "image/jpeg",
+                    data: base64Image
+                }
+            }
+        ];
+
+        const result = await model.generateContent(parts);
+        const response = await result.response;
+        const text = response.text();
+        const cleanText = cleanJSON(text);
+        
+        try {
+            const json = JSON.parse(cleanText);
+            state.metadata = json;
+        } catch (e) {
+            console.error("JSON Parse Error:", text);
+            throw new Error("Failed to parse AI response");
+        }
+    }
+
+    async function generateSuitPreview(metadata, suitType) {
+        if (!state.suitBaseBase64) throw new Error("Suit base missing");
+
+        // Format metadata values to ensure they are readable strings for the prompt
+        const formatVal = (val) => {
+            if (typeof val === 'object' && val !== null) {
+                return Object.entries(val).map(([k, v]) => `${k}: ${v}`).join(", ");
+            }
+            return val || "Not specified";
+        };
+
+        const faceInfo = formatVal(metadata?.FACE);
+        const modelInfo = formatVal(metadata?.MODEL);
+        const hairInfo = formatVal(metadata?.DETAILS);
+        const facialHairInfo = formatVal(metadata?.FACIAL_HAIR);
+
+        const finalPrompt = `
+            Ultra realistic 8k portrait for a luxury virtual try-on.
+            
+            I have provided two images:
+            IMAGE 1: A base image showing a man in a ${suitType}.
+            IMAGE 2: A source portrait of a person (the target face identity).
+            
+            Instructions: 
+            - REPLACE the head, hair, and facial features of the man in IMAGE 1 with the head and features from IMAGE 2.
+            - KEEP everything else from IMAGE 1: the ${suitType}, background, lighting, and pose must be EXACTLY the same.
+            - Ensure skin tone and features match: ${faceInfo}, ${modelInfo}.
+            - Matching hair style: ${hairInfo}.
+            - Matching grooming: ${facialHairInfo}.
+            
+            Generate a high-end, photorealistic result.
+        `.trim();
+
+        const model = genAI.getGenerativeModel({
+            model: "gemini-2.5-flash-image",
+            generationConfig: {
+                imageConfig: {
+                    aspectRatio: "2:3",
+                },
+            },
+        });
+
+        const parts = [
+            { text: finalPrompt },
+            { text: "IMAGE 1 (Base/Background):" },
+            {
+                inlineData: {
+                    mimeType: "image/png",
+                    data: state.suitBaseBase64,
+                },
+            },
+            { text: "IMAGE 2 (Face Identity):" },
+            {
+                inlineData: {
+                    mimeType: "image/jpeg",
+                    data: state.capturedImageBase64,
+                },
+            },
+        ];
+
+        const result = await model.generateContent(parts);
+        const response = await result.response;
+        const candidate = response.candidates[0];
+        const imagePart = candidate.content.parts.find(p => p.inlineData);
+
+        if (imagePart && imagePart.inlineData.data) {
+            localStorage.setItem('generatedLook', imagePart.inlineData.data);
+            window.location.href = 'result.html';
+        } else {
+            throw new Error("AI tailoring failed to return image.");
+        }
+    }
+
     // Capture functionality
-    captureBtn.addEventListener('click', () => {
+    captureBtn.addEventListener('click', async () => {
+        if (!video.videoWidth) return;
+
         const context = canvas.getContext('2d');
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         
         // Flash effect
         const flash = document.createElement('div');
-        flash.style.position = 'fixed';
-        flash.style.top = '0';
-        flash.style.left = '0';
-        flash.style.width = '100%';
-        flash.style.height = '100%';
-        flash.style.backgroundColor = 'white';
-        flash.style.zIndex = '1000';
-        flash.style.opacity = '0.8';
-        flash.style.transition = 'opacity 0.3s ease-out';
+        flash.setAttribute('style', 'position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:9999;opacity:0.8;transition:opacity 0.3s');
         document.body.appendChild(flash);
-        
-        setTimeout(() => {
-            flash.style.opacity = '0';
-            setTimeout(() => document.body.removeChild(flash), 300);
-        }, 50);
+        setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => document.body.removeChild(flash), 300); }, 50);
 
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = canvas.toDataURL('image/jpeg', 0.8);
+        state.capturedImageBase64 = imageData.replace(
+            /^data:image\/jpeg;base64,/,
+            "",
+        );
+        video.pause();
         
-        const imageData = canvas.toDataURL('image/png');
-        console.log('Image Captured:', imageData.substring(0, 50) + '...');
-        
-        // Show Processing Loader
         processingOverlay.classList.remove('hidden');
-        setProgress(0);
+        setProgress(10);
+        loadingMsg.textContent = "Analyzing facial features...";
         
         captureBtn.style.pointerEvents = 'none';
         captureBtn.style.opacity = '0.5';
 
-        // 2-second loading imitation
-        let progress = 0;
-        const startTime = Date.now();
-        const duration = 2000;
+        try {
+            // Step 1: Decode Face
+            await decodeFace(state.capturedImageBase64);
+            setProgress(40);
+            loadingMsg.textContent = "Generating your look...";
 
-        const interval = setInterval(() => {
-            const elapsed = Date.now() - startTime;
-            progress = Math.min((elapsed / duration) * 100, 100);
+            // Step 2: Generate Look
+            await generateSuitPreview(state.metadata, "standard charcoal slim-fit");
+            setProgress(100);
             
-            setProgress(progress);
-
-            if (elapsed >= duration) {
-                clearInterval(interval);
-                setTimeout(() => {
-                    window.location.href = 'result.html';
-                }, 300);
-            }
-        }, 30);
+        } catch (error) {
+            console.error(error);
+            alert("AI processing failed. Check console.");
+            processingOverlay.classList.add('hidden');
+            captureBtn.style.pointerEvents = 'all';
+            captureBtn.style.opacity = '1';
+        }
     });
 });
