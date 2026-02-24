@@ -21,6 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     createBtn.addEventListener('click', () => {
+        const materialSelect = document.getElementById('material-select');
+        if (materialSelect) {
+            localStorage.setItem('selectedMaterialPath', materialSelect.value);
+        }
+        // Clear previous results to avoid confusion
+        localStorage.removeItem('generatedLook');
         window.location.href = 'capture.html';
     });
 });

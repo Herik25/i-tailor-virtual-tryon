@@ -215,45 +215,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function regenerateLook(material) {
         const capturedImage = localStorage.getItem('capturedImageBase64');
-        const suitBase = localStorage.getItem('suitBaseBase64');
-        const metadataString = localStorage.getItem('metadata');
         
-        if (!capturedImage || !suitBase) {
+        if (!capturedImage) {
             throw new Error("Missing original capture data. Please recapture.");
         }
 
-        const metadata = JSON.parse(metadataString || '{}');
         const materialBase64 = await getBase64FromUrl(material.file);
         
-        // Format metadata for the prompt
-        const formatVal = (val) => {
-            if (typeof val === 'object' && val !== null) {
-                return Object.entries(val).map(([k, v]) => `${k}: ${v}`).join(", ");
-            }
-            return val || "Not specified";
-        };
-
         const finalPrompt = `
-            Ultra realistic 8k portrait for a luxury virtual try-on.
+            Create a high-end, photorealistic 8k portrait of the person in IMAGE 1. 
+            They should be wearing a premium, perfectly tailored bespoke suit. 
+            The fabric of the suit must exactly match the texture, color, and pattern shown in the material swatch in IMAGE 2. 
             
-            Inputs:
-            - IMAGE 1 (Base Template): A professional male model in a suit.
-            - IMAGE 2 (Identity): The target user's face and head.
-            - IMAGE 3 (Material Swatch): The fabric to be applied to the suit.
+            Key requirements:
+            - PRESERVE IDENTITY: The person must look exactly like the individual in IMAGE 1.
+            - POSE: Professional, confident, and natural portrait pose (waist-up).
+            - SETTING: Luxury penthouse or a high-end studio with soft cinematic lighting.
+            - FABRIC: The suit should clearly show the fabric detail from IMAGE 2.
             
-            Instructions:
-            1. Replace the model's head in IMAGE 1 with the head from IMAGE 2. Preserve identity exactly.
-            2. Apply the specific fabric from IMAGE 3 to the suit in IMAGE 1.
-            3. Match the texture and lighting perfectly.
-            4. Keep the background and pose from IMAGE 1.
-            
-            Technical metadata for face matching:
-            Skin/Model: ${formatVal(metadata.MODEL)}
-            Face: ${formatVal(metadata.FACE)}
-            Hair: ${formatVal(metadata.DETAILS)}
-            Grooming: ${formatVal(metadata.FACIAL_HAIR)}
-            
-            Return only the updated photographic result.
+            Generate a high-end, photorealistic result.
         `.trim();
 
         const model = genAI.getGenerativeModel({
@@ -267,11 +247,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const parts = [
             { text: finalPrompt },
-            { text: "IMAGE 1 (Base Template):" },
-            { inlineData: { mimeType: "image/png", data: suitBase } },
-            { text: "IMAGE 2 (Identity):" },
+            { text: "IMAGE 1 (Person Identity):" },
             { inlineData: { mimeType: "image/jpeg", data: capturedImage } },
-            { text: "IMAGE 3 (Material Swatch):" },
+            { text: "IMAGE 2 (Fabric Material):" },
             { inlineData: { mimeType: "image/jpeg", data: materialBase64 } }
         ];
 
@@ -283,6 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (imagePart && imagePart.inlineData.data) {
             const newData = imagePart.inlineData.data;
             localStorage.setItem('generatedLook', newData);
+            localStorage.setItem('materialBase64', materialBase64);
             resultImg.src = `data:image/png;base64,${newData}`;
         } else {
             throw new Error("AI tailoring failed to update the fabric.");

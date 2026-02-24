@@ -152,6 +152,57 @@ main {
     transform: translateY(0);
 }
 
+.material-selection {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.material-selection label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 0.8rem;
+    color: var(--text-color);
+}
+
+.custom-select-wrapper {
+    position: relative;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.custom-select-wrapper select {
+    width: 100%;
+    padding: 0.8rem 1.5rem;
+    font-family: 'Proxima Nova', sans-serif;
+    font-size: 1rem;
+    background: white;
+    border: 1.5px solid #482A183D;
+    color: var(--text-color);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color 0.3s ease;
+}
+
+.custom-select-wrapper select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.custom-select-wrapper::after {
+    content: '▼';
+    position: absolute;
+    right: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 0.8rem;
+    color: var(--text-color);
+    opacity: 0.6;
+}
+
 .capture-input {
     margin-top: 1rem;
 }
