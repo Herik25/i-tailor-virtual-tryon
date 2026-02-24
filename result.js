@@ -223,17 +223,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const materialBase64 = await getBase64FromUrl(material.file);
         
         const finalPrompt = `
-            Create a high-end, photorealistic 8k portrait of the person in IMAGE 1. 
-            They should be wearing a premium, perfectly tailored bespoke suit. 
-            The fabric of the suit must exactly match the texture, color, and pattern shown in the material swatch in IMAGE 2. 
-            
-            Key requirements:
-            - PRESERVE IDENTITY: The person must look exactly like the individual in IMAGE 1.
-            - POSE: Professional, confident, and natural portrait pose (waist-up).
-            - SETTING: Luxury penthouse or a high-end studio with soft cinematic lighting.
-            - FABRIC: The suit should clearly show the fabric detail from IMAGE 2.
-            
-            Generate a high-end, photorealistic result.
+            Full-body studio portrait of a man wearing a perfectly tailored suit made from the uploaded fabric swatch, exact fabric texture, weave, color tone, and pattern must match the uploaded fabric reference precisely (no color shift, no reinterpretation). Suit constructed with sharp modern tailoring, structured shoulders, clean lapels, slim fit trousers, white dress shirt, black slim tie, black leather Oxford shoes.
+            Replace the model’s face with the uploaded face image, maintain natural skin texture, correct facial proportions, realistic lighting match, seamless integration (no distortion, no blur, no morphing artifacts), preserve hairstyle if possible or adapt naturally to suit style.
+            Hands in trouser pockets, standing straight and confident, neutral facial expression, seamless light grey studio background, soft high-key lighting, symmetrical composition, sharp tailoring details, realistic fabric texture visibility, luxury menswear editorial photography.
+            Ultra-realistic, 85mm lens, f/2.8, shallow depth of field, professional fashion photography, sharp focus, high detail, visible fabric weave, accurate skin tone, photorealistic rendering.
         `.trim();
 
         const model = genAI.getGenerativeModel({
