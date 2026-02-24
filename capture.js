@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const galleryInput = document.getElementById('gallery-input');
     const galleryLink = document.getElementById('gallery-link');
     const galleryPreview = document.getElementById('gallery-preview');
+    let suitLoadedPromise = null;
 
     function setProgress(percent) {
         const radius = 45;
@@ -38,19 +39,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function loadSuitBase() {
-        try {
-            const response = await fetch("suit-base.png");
-            const blob = await response.blob();
-            state.suitBaseBase64 = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result.split(",")[1]);
-            reader.readAsDataURL(blob);
-            });
-            console.log("Suit base image loaded successfully.");
-        } catch (err) {
-            console.error("Failed to load suit-base.png:", err);
-        }
+    function loadSuitBase() {
+        suitLoadedPromise = new Promise(async (resolve, reject) => {
+            try {
+                const response = await fetch("/suit-base.png");
+                const blob = await response.blob();
+    
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    state.suitBaseBase64 = reader.result.split(",")[1];
+                    // console.log("Suit base ready");
+                    resolve();
+                };
+                reader.readAsDataURL(blob);
+            } catch (err) {
+                console.error("Suit load failed", err);
+                reject(err);
+            }
+        });
+    
+        return suitLoadedPromise;
     }
 
     async function initWebcam() {
@@ -258,6 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             await decodeFace(state.capturedImageBase64);
             setProgress(40);
+            await suitLoadedPromise;
             loadingMsg.textContent = "Generating your look...";
             await generateSuitPreview(state.metadata, "standard charcoal slim-fit");
             setProgress(100);
