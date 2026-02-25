@@ -4,14 +4,14 @@ const GEMINI_API_KEY = "AIzaSyBJfElFwmkySfGIwL7HxhzTAsPeJTIqd8U";
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 const materials = [
-    { name: "Black Suit", file: "materials/Black Suit.jpg", price: 239, originalPrice: 259, promo: true, color: "black", fabricNo: "BK-001", pattern: "Solid", season: "All Season" },
-    { name: "Olive Suit", file: "materials/Olive Suit.jpg", price: 239, originalPrice: 259, promo: true, color: "olive", fabricNo: "OL-002", pattern: "Solid", season: "Summer" },
-    { name: "Dark Navy", file: "materials/Dark Navy.jpg", price: 259, color: "navy", fabricNo: "NV-003", pattern: "Solid", season: "All Season" },
-    { name: "Light Navy", file: "materials/Light Navy.jpg", price: 259, color: "blue", fabricNo: "LB-004", pattern: "Solid", season: "Summer" },
-    { name: "Brown Suit", file: "materials/BROWN Suit.jpg", price: 259, color: "brown", fabricNo: "BR-005", pattern: "Solid", season: "Winter" },
-    { name: "Textured Light Gray", file: "materials/Textured Light Gray.jpg", price: 259, color: "gray", fabricNo: "GR-006", pattern: "Textured", season: "Winter" },
-    { name: "Textured Gray", file: "materials/Textured Grey.jpg", price: 259, color: "gray", fabricNo: "GR-007", pattern: "Textured", season: "All Season" },
-    { name: "Textured Medium Gray", file: "materials/Textured Medium Grey.jpg", price: 259, color: "gray", fabricNo: "GR-008", pattern: "Textured", season: "All Season" }
+    { name: "Black Suit", file: "materials/Black Suit.jpg", price: 239, originalPrice: 259, promo: true, color: "black", fabricNo: "SK-001", pattern: "Solid", composition: "Premium Cotton", season: "All Season" },
+    { name: "Olive Suit", file: "materials/Olive Suit.jpg", price: 239, originalPrice: 259, promo: true, color: "olive", fabricNo: "3682-4", pattern: "Solid", composition: "Wool Blend", season: "Summer" },
+    { name: "Dark Navy (Color: Navy)", file: "materials/Dark Navy.jpg", price: 259, color: "navy", fabricNo: "3799-2", pattern: "Solid", composition: "Wool Blend", season: "All Season" },
+    { name: "Light Navy", file: "materials/Light Navy.jpg", price: 259, color: "blue", fabricNo: "4122-1", pattern: "Solid", composition: "Premium Cotton", season: "Summer" },
+    { name: "Brown Suit", file: "materials/BROWN Suit.jpg", price: 259, color: "brown", fabricNo: "BR-552", pattern: "Solid", composition: "Wool Blend", season: "Winter" },
+    { name: "Textured Light Gray", file: "materials/Textured Light Gray.jpg", price: 259, color: "gray", fabricNo: "GR-901", pattern: "Textured", composition: "Wool Blend", season: "Winter" },
+    { name: "Textured Gray", file: "materials/Textured Grey.jpg", price: 259, color: "gray", fabricNo: "GR-902", pattern: "Textured", composition: "Wool Blend", season: "All Season" },
+    { name: "Textured Medium Gray", file: "materials/Textured Medium Grey.jpg", price: 259, color: "gray", fabricNo: "GR-903", pattern: "Textured", composition: "Wool Blend", season: "All Season" }
 ];
 
 let selectedMaterial = null;
@@ -19,6 +19,7 @@ let selectedMaterial = null;
 document.addEventListener('DOMContentLoaded', () => {
     const resultImg = document.getElementById('finalGeneratedImage');
     const openModalBtn = document.getElementById('open-modal-btn');
+    const tryMoreBtn = document.getElementById('change-fabric-btn');
     const closeModalBtn = document.getElementById('closeModal');
     const cancelBtn = document.getElementById('cancelBtn');
     const confirmBtn = document.getElementById('confirmBtn');
@@ -27,10 +28,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalLoader = document.getElementById('modalLoader');
     const shareLinkBtn = document.getElementById('shareLinkBtn');
 
+    // Fabric Card Elements
+    const swatchImg = document.getElementById('selectedSwatchImg');
+    const fabricCodeEl = document.getElementById('fabricCode');
+    const fabricNameEl = document.getElementById('fabricName');
+    const fabricDetailEl = document.getElementById('fabricComposition');
+
     const generatedData = localStorage.getItem('generatedLook');
     if (generatedData) {
         resultImg.src = `data:image/png;base64,${generatedData}`;
     }
+
+    // Initialize Fabric Card with current material
+    function updateFabricCard(material) {
+        try {
+            if (!material) {
+                const currentPath = localStorage.getItem('selectedMaterialPath') || "materials/Dark Navy.jpg";
+                console.log("iTailor: Finding dynamic material for path:", currentPath);
+                material = materials.find(m => m.file === currentPath) || materials[2];
+            }
+            
+            if (material) {
+                console.log("iTailor: Syncing fabric card with:", material.fabricNo, "-", material.name);
+                if (swatchImg) swatchImg.src = material.file;
+                if (fabricCodeEl) fabricCodeEl.textContent = material.fabricNo;
+                if (fabricNameEl) fabricNameEl.textContent = material.name.toUpperCase();
+                if (fabricDetailEl) fabricDetailEl.textContent = `${material.pattern}, ${material.composition}`;
+            } else {
+                console.warn("iTailor: No material found to sync card data.");
+            }
+        } catch (err) {
+            console.error("iTailor: Error updating dynamic fabric card:", err);
+        }
+    }
+
+    console.log("iTailor: Initializing results page UI...");
+    updateFabricCard();
 
     let currentFilters = {
         color: 'all',
@@ -151,10 +184,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    openModalBtn.onclick = (e) => {
+    const openModal = (e) => {
         e.preventDefault();
         materialModal.classList.add('active');
     };
+
+    openModalBtn.onclick = openModal;
+    tryMoreBtn.onclick = openModal;
 
     const closePopup = () => {
         materialModal.classList.remove('active');
@@ -177,6 +213,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             await regenerateLook(selectedMaterial);
+            updateFabricCard(selectedMaterial);
+            localStorage.setItem('selectedMaterialPath', selectedMaterial.file);
             closePopup();
         } catch (error) {   
             console.error(error);
@@ -231,11 +269,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const model = genAI.getGenerativeModel({
             model: "gemini-2.5-flash-image",
-            generationConfig: {
-                imageConfig: {
-                    aspectRatio: "2:3",
-                },
-            },
+            // generationConfig: {
+            //     imageConfig: {
+            //         aspectRatio: "2:3",
+            //     },
+            // },
         });
 
         const parts = [

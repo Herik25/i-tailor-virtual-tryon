@@ -441,133 +441,226 @@ main {
 .result-container {
     display: flex;
     height: 100vh;
-    width: 100%;
+    width: 100vw;
     overflow: hidden;
-    background-image: url('bg.png');
-    background-size: cover;
-    background-position: center;
+    max-width: 1440px;
+    margin: 0 auto;
 }
 
+/* Left Side: Beige Texture */
 .result-left {
-    flex: 1;
-    padding: 3rem;
+    flex: 0 0 50%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    padding: 4rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     position: relative;
 }
 
-.result-left #close-btn {
-    position: absolute;
-    top: 2rem;
-    left: 2rem;
-}
-
-.result-content {
-    /* max-width: 500px; */
-    margin-left: 2rem;
-}
-
 .result-title {
-    font-size: 5rem;
-    line-height: 96%;
-    letter-spacing: -0.5px;
-    margin-bottom: 0.5rem;
-    color: var(--text-color);
-    font-weight: 400;
-}
-
-.result-text {
-    font-size: 1.125rem;
-    line-height: 125%;
-    color: var(--subtext-color);
-    margin-bottom: 2.5rem;
+    font-size: 3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #482A18;
+    margin-bottom: 8px;
+    letter-spacing: 10%;
     font-family: 'Proxima Nova', sans-serif;
 }
 
-.result-buttons {
-    display: flex;
-    gap: 1rem;
+.result-text {
+    font-size: 1.15rem;
+    line-height: 135%;
+    color: #482A18;
+    margin-bottom: 2rem;
+    font-family: 'Proxima Nova', sans-serif;
 }
 
-.shop-btn {
-    display: inline-block;
-    padding: 0.75rem 2.5rem;
-    border: 1.5px solid var(--text-color);
-    background: transparent;
-    color: var(--text-color);
+.result-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.btn {
+    padding-block: 1rem;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     cursor: pointer;
     transition: all 0.3s ease;
-    text-decoration: none;
+    border: 1.5px solid #482A18;
+    border-radius: 0; /* Strict square corners */
 }
 
-.shop-btn.inverted {
-    background-color: var(--text-color);
+.btn-outline {
+    background: white;
+    color: #482A18;
+}
+
+.btn-solid {
+    background: #482A18;
     color: white;
 }
 
-.shop-btn:hover {
-    background: var(--text-color);
-    color: white;
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(72, 42, 24, 0.15);
 }
 
-.shop-btn.inverted:hover {
-    background: transparent;
-    color: var(--text-color);
+.trustpilot-footer {
+    position: absolute;
+    bottom: 3.5rem;
+    left: 4.5rem;
 }
 
+.tp-img {
+    height: 45px;
+    width: auto;
+}
+
+/* Right Side: Light Grey Stage */
 .result-right {
-    flex: 1;
-    position: relative;
+    flex: 0 0 50%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
     display: flex;
     justify-content: center;
-    align-items: center;
-    background-color: transparent;
+    align-items: flex-end;
+    position: relative;
+    overflow: hidden;
 }
 
-.image-wrapper {
+.image-frame {
     position: relative;
     height: 100%;
-    aspect-ratio: 2 / 3;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
 }
 
 .result-image {
     width: 100%;
     height: 100%;
-    object-fit: cover; 
-    display: block;
+    object-fit: cover;
 }
 
-.share-container {
+.share-icon-btn {
     position: absolute;
-    bottom: 3rem;
-    left: 3rem;
+    bottom: 3.5rem;
+    left: 2.5rem;
+    background: transparent;
+    border: none;
+    color: #482A18;
+    cursor: pointer;
+    transition: transform 0.2s ease;
     z-index: 10;
 }
 
-.share-link-btn {
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid #482A18;
-    color: #482A18;
-    padding: 0.2rem 0;
-    font-size: 1.5rem;
-    font-family: 'Sakkal Majalla', serif;
-    letter-spacing: 3px;
-    cursor: pointer;
-    transition: opacity 0.3s ease;
-    line-height: 1;
+.share-icon-btn:hover {
+    opacity: 1;
 }
 
-.share-link-btn:hover {
-    opacity: 0.7;
+.fabric-card {
+    position: absolute;
+    bottom: 4rem;
+    right: 2.5rem;
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 100;
+}
+
+.fabric-swatch-container {
+    width: 100%;
+    aspect-ratio: 1/1.05;
+    background: linear-gradient(180deg, #FFFFFF 0%, #B1B1B1 100%);
+    padding: 1.5px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.fabric-swatch-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.fabric-badge {
+    position: absolute;
+    bottom: 12px;
+    left: 1;
+    width: 98%;
+    background: #482A18;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-family: 'Proxima Nova', sans-serif;
+}
+
+.fabric-id {
+    font-size: 12px;
+    color: #482A18;
+    margin-bottom: 4px;
+    font-weight: 400;
+    line-height: 135%;
+    text-transform: capitalize;
+    font-family: 'Proxima Nova', sans-serif;
+}
+
+#fabricCode {
+    font-weight: 600;
+}
+
+.fabric-name {
+    font-size: 12px;
+    color: #482A18;
+    margin-bottom: 4px;
+    font-weight: 600;
+    line-height: 135%;
+    text-transform: capitalize;
+    font-family: 'Proxima Nova', sans-serif;
+}
+
+.fabric-detail {
+    font-size: 12px;
+    color: #482A18;
+    margin-bottom: 8px;
+    font-weight: 400;
+    line-height: 135%;
+    text-transform: capitalize;
+    font-family: 'Proxima Nova', sans-serif;
+}
+
+.try-more-btn {
+    background: #482A18;
+    border-radius: 4px;
+    color: white;
+    border: 1.5px solid #482A18;
+    padding-block: 10px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    width: 90%;
+    transition: background 0.3s;
+}
+
+.try-more-btn:hover {
+    background: #361f12;
 }
 
 .toast {

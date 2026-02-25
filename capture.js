@@ -158,11 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const model = genAI.getGenerativeModel({
             model: "gemini-2.5-flash-image",
-            generationConfig: {
-                imageConfig: {
-                    aspectRatio: "2:3",
-                },
-            },
+            // generationConfig: {
+            //     imageConfig: {
+            //         aspectRatio: "2:3",
+            //     },
+            // },
         });
 
         const parts = [
@@ -192,6 +192,11 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('generatedLook', imagePart.inlineData.data);
             localStorage.setItem('capturedImageBase64', state.capturedImageBase64);
             localStorage.setItem('materialBase64', state.materialBase64);
+            
+            // Save the material path used for this generation
+            const usedPath = localStorage.getItem('selectedMaterialPath') || "materials/Dark Navy.jpg";
+            localStorage.setItem('selectedMaterialPath', usedPath);
+            
             window.location.href = 'result.html';
         } else {
             throw new Error("AI tailoring failed to return image.");

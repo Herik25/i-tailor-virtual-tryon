@@ -8,50 +8,58 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="modal.css">
     <link rel="stylesheet" href="header.css">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-        .result-container {
-            flex: 1;
-            height: calc(100vh - 105px);
-        }
-    </style>
 </head>
 <body>
     <div id="header-placeholder"></div>
     <div class="result-container">
-        <div class="result-left">
+        <!-- Left Content Section -->
+        <section class="result-left">
             <div class="result-content">
-                <h1 class="result-title">A Preview of Your Bespoke Future</h1>
+                <h1 class="result-title">A Preview Of Your<br/>Bespoke Future</h1>
                 <p class="result-text">Your bespoke look, brought to life. Customize your suit further in our state-of-the-art 3D Designer, share it with friends and family, or explore our most sought-after best-selling styles.</p>
-                <div class="result-buttons">
-                    <button class="shop-btn inverted">SHOP THIS LOOK</button>
-                        <button id="open-modal-btn" class="shop-btn">CREATE YOUR OWN</button>
+                <div class="result-actions">
+                    <button class="btn btn-outline">SHOP THIS LOOK</button>
+                    <button id="open-modal-btn" class="btn btn-solid">CUSTOMIZE THIS SUIT</button>
                 </div>
             </div>
-        </div>
-        <div class="result-right">
-            <div class="image-wrapper">
-                <img id="finalGeneratedImage" src="suit-base.png" alt="Your Fresh Look" class="result-image">
-                <div class="share-container">
-                    <button id="shareLinkBtn" class="share-link-btn">SHARE</button>
-                </div>
-                <div id="pageLoader" class="processing-overlay hidden">
-                    <div class="circular-progress">
-                        <svg viewBox="0 0 100 100">
-                            <circle class="bg" cx="50" cy="50" r="45"></circle>
-                            <circle class="fg" cx="50" cy="50" r="45"></circle>
-                        </svg>
-                        <div id="progressPercent" class="progress-text">0%</div>
+
+            <!-- Trustpilot Footer -->
+            <div class="trustpilot-footer">
+                <img src="./trust-pilot.png" alt="Trustpilot reviews" class="tp-img">
+            </div>
+        </section>
+
+        <!-- Right Image Section -->
+        <section class="result-right">
+            <div class="image-frame">
+                <img id="finalGeneratedImage" src="suit-base.png" alt="Your Generated Look" class="result-image">
+                
+                <!-- Share Icon -->
+                <button id="shareLinkBtn" class="share-icon-btn" aria-label="Share">
+                    <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g opacity="0.6">
+                            <path d="M37.5008 18.75C38.7699 18.75 40.0089 18.3638 41.0531 17.6425C42.0973 16.9213 42.8971 15.8992 43.3463 14.7123C43.7956 13.5254 43.8728 12.2299 43.5678 10.998C43.2628 9.76612 42.5901 8.65627 41.639 7.81604C40.6879 6.97582 39.5036 6.44503 38.2435 6.29427C36.9834 6.1435 35.7073 6.3799 34.5848 6.97203C33.4624 7.56416 32.5468 8.48396 31.9598 9.60912C31.3728 10.7343 31.1422 12.0115 31.2987 13.2708L16.8404 20.5C15.9575 19.6487 14.8437 19.0759 13.6376 18.853C12.4316 18.6302 11.1866 18.7671 10.0578 19.2467C8.92904 19.7263 7.9663 20.5274 7.28955 21.5503C6.6128 22.5731 6.25195 23.7725 6.25195 24.999C6.25195 26.2254 6.6128 27.4248 7.28955 28.4476C7.9663 29.4705 8.92904 30.2716 10.0578 30.7513C11.1866 31.2309 12.4316 31.3678 13.6376 31.1449C14.8437 30.922 15.9575 30.3493 16.8404 29.4979L31.2987 36.7271C31.1164 38.1901 31.4572 39.6704 32.2607 40.9065C33.0643 42.1426 34.279 43.0547 35.6901 43.4819C37.1012 43.909 38.6178 43.8235 39.972 43.2406C41.3262 42.6576 42.4307 41.6147 43.0903 40.2962C43.7499 38.9777 43.9222 37.4685 43.5767 36.0352C43.2312 34.6019 42.3901 33.337 41.2022 32.4638C40.0142 31.5907 38.5559 31.1656 37.0848 31.2637C35.6138 31.3619 34.2248 31.9768 33.1633 33L18.705 25.7708C18.7686 25.2589 18.7686 24.7411 18.705 24.2292L33.1633 17C34.2841 18.0833 35.8133 18.75 37.5008 18.75Z" fill="black"/>
+                        </g>
+                    </svg>
+                </button>
+
+                <!-- Fabric Card -->
+                <div class="fabric-card">
+                    <div class="fabric-swatch-container">
+                        <img id="selectedSwatchImg" src="materials/Dark Navy.jpg" alt="Selected Fabric">
+                        <div class="fabric-badge">SELECTED FABRIC</div>
                     </div>
-                    <p id="loadingMsg">Regenerating your look...</p>
+                    <div class="fabric-info">
+                        <p class="fabric-id">Fabric: <span id="fabricCode">3799-2</span></p>
+                        <p class="fabric-name" id="fabricName">DARK NAVY (COLOR: NAVY)</p>
+                        <p class="fabric-detail" id="fabricComposition">Solid, Wool Blend</p>
+                    </div>
+                    <button id="change-fabric-btn" class="try-more-btn">TRY MORE FABRICS</button>
                 </div>
             </div>
+            
             <div id="toast" class="toast hidden">Link copied to clipboard</div>
-        </div>
+        </section>
     </div>
 
     <!-- Material Selector Modal -->
