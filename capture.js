@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-const GEMINI_API_KEY = "AIzaSyDjmVgmeOkgBk7U5p_LAbHp9NZeuaaLafY"; 
+const GEMINI_API_KEY = "AIzaSyBJfElFwmkySfGIwL7HxhzTAsPeJTIqd8U"; 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 const state = {
@@ -14,30 +14,52 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('canvas');
     const container = document.querySelector('.container');
     const processingOverlay = document.getElementById('processingOverlay');
-    const progressPercent = document.getElementById('progressPercent');
     const loadingMsg = document.getElementById('loadingMsg');
-    const fgCircle = processingOverlay.querySelector('.fg');
     const galleryInput = document.getElementById('gallery-input');
     const galleryLink = document.getElementById('gallery-link');
     const galleryPreview = document.getElementById('gallery-preview');
+    const slideshowImages = processingOverlay.querySelectorAll('.loader-img');
+    let slideshowInterval;
     let materialLoadedPromise = null;
 
-    function setProgress(percent) {
-        const radius = 45;
-        const circumference = 2 * Math.PI * radius;
-        const offset = circumference - (percent / 100) * circumference;
-        if (fgCircle) {
-            fgCircle.style.strokeDashoffset = offset;
+    function startLoaderSlideshow() {
+        if (slideshowInterval) clearInterval(slideshowInterval);
+        
+        let currentIndex = 0;
+        
+        // Reset all images and set first one active
+        slideshowImages.forEach(img => img.classList.remove('active'));
+        if (slideshowImages.length > 0) {
+            slideshowImages[0].classList.add('active');
+            loadingMsg.textContent = "Crafting Your Bespoke Look";
         }
-        if (progressPercent) {
-            progressPercent.textContent = `${Math.round(percent)}%`;
+
+        slideshowInterval = setInterval(() => {
+            if (slideshowImages.length === 0) return;
+            
+            slideshowImages[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % slideshowImages.length;
+            slideshowImages[currentIndex].classList.add('active');
+            
+            const msgs = ["Crafting Your Bespoke Look", "Tailoring to Precision", "Perfecting Every Detail"];
+            loadingMsg.textContent = msgs[currentIndex % msgs.length];
+            
+            console.log(`Slideshow: Switched to image ${currentIndex}`);
+        }, 3000); 
+    }
+
+    function stopLoaderSlideshow() {
+        if (slideshowInterval) clearInterval(slideshowInterval);
+        slideshowImages.forEach(img => img.classList.remove('active'));
+        if (slideshowImages.length > 0) {
+            slideshowImages[0].classList.add('active');
         }
     }
 
     function loadDefaultMaterial() {
         materialLoadedPromise = new Promise(async (resolve, reject) => {
             try {
-                const selectedPath = localStorage.getItem('selectedMaterialPath') || "materials/Black Suit.jpg";
+                const selectedPath = localStorage.getItem('selectedMaterialPath') || "materials/Dark Navy.jpg";
                 
                 const response = await fetch(encodeURI(selectedPath));
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -181,6 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const context = canvas.getContext('2d');
         if (!state.capturedImageBase64) {
+            const dpr = window.devicePixelRatio || 1;
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             
@@ -199,24 +222,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         processingOverlay.classList.remove('hidden');
-        setProgress(20);
-        loadingMsg.textContent = "Crafting your bespoke look...";
+        startLoaderSlideshow();
         
         captureBtn.style.pointerEvents = 'none';
         captureBtn.style.opacity = '0.5';
 
         try {
             await materialLoadedPromise;
-            setProgress(50);
             await generateFinalLook();
-            setProgress(100);
-            
         } catch (error) {
             console.error(error);
             alert("AI generation failed. Check console.");
             processingOverlay.classList.add('hidden');
+            stopLoaderSlideshow();
             captureBtn.style.pointerEvents = 'all';
             captureBtn.style.opacity = '1';
         }
     });
+
+    if (!processingOverlay.classList.contains('hidden')) {
+        startLoaderSlideshow();
+    }
 });

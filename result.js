@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-const GEMINI_API_KEY = "AIzaSyDjmVgmeOkgBk7U5p_LAbHp9NZeuaaLafY";
+const GEMINI_API_KEY = "AIzaSyBJfElFwmkySfGIwL7HxhzTAsPeJTIqd8U";
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 const materials = [

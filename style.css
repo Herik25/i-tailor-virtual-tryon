@@ -309,40 +309,106 @@ main {
 }
 
 .processing-overlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.45);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 20;
+    z-index: 9999;
     color: white;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     transition: opacity 0.5s ease;
 }
 
-.circular-progress {
+.luxury-loader {
     position: relative;
-    width: 140px;
-    height: 140px;
-    margin-bottom: 1.5rem;
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
 }
 
-.circular-progress svg {
+.loader-svg {
+    position: absolute;
     width: 100%;
     height: 100%;
     transform: rotate(-90deg);
+    transform-origin: center;
 }
 
-.circular-progress circle {
+.loader-svg .track {
     fill: none;
-    stroke-width: 5;
-    stroke-linecap: round;
+    stroke: rgba(255, 255, 255, 0.05);
+    stroke-width: 2px;
 }
+
+.loader-svg .luxury-ring {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2px;
+    stroke-linecap: round;
+    stroke-dasharray: 302;
+    stroke-dashoffset: 302;
+    transform-origin: center;
+    animation: luxuryFill 4s cubic-bezier(0.4, 0.2, 0.2, 1) infinite, rotateRing 8s linear infinite;
+}
+
+.loading-slideshow {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.loader-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    will-change: opacity;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.loader-img.active {
+    opacity: 1;
+}
+
+#loadingMsg {
+    font-size: 1.25rem;
+    font-family: 'Future Book', sans-serif;
+    letter-spacing: 3px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #fff;
+    opacity: 0.8;
+    text-align: center;
+    margin-top: 10px;
+}
+
+@keyframes luxuryFill {
+    0% { stroke-dashoffset: 302; }
+    50% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -302; }
+}
+
+@keyframes rotateRing {
+    0% { transform: rotate(-90deg); }
+    100% { transform: rotate(270deg); }
+}
+
+/* Old Circular Progress Styles Removed */
 
 .circular-progress circle.bg {
     stroke: rgba(255, 255, 255, 0.15);
@@ -622,5 +688,21 @@ main {
     #create-btn, #capture-btn {
         width: 100%;
         padding: 1.2rem;
+    }
+
+    .luxury-loader {
+        width: 160px;
+        height: 160px;
+        margin-bottom: 1.5rem;
+    }
+
+    .loading-slideshow {
+        width: 80px;
+        height: 80px;
+    }
+
+    #loadingMsg {
+        font-size: 1.1rem;
+        letter-spacing: 2px;
     }
 }

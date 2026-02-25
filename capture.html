@@ -15,6 +15,21 @@
             <h1 class="main-title secondary-title">Center Your Face</h1>
             <p class="sub-text" style="font-family: 'Future Book', sans-serif; font-weight: 500; font-size: 18px; margin-bottom: 1.5rem; line-height: 125%;">Good lighting & a centered position help us craft your most<br /> precise tailored preview.</p>
             
+            <div id="processingOverlay" class="processing-overlay hidden">
+                <div class="luxury-loader">
+                    <svg class="loader-svg" viewBox="0 0 100 100">
+                        <circle class="track" cx="50" cy="50" r="48"></circle>
+                        <circle class="luxury-ring" cx="50" cy="50" r="48"></circle>
+                    </svg>
+                    <div class="loading-slideshow">
+                        <img src="./loading/loading-1.svg" alt="Crafting" class="loader-img">
+                        <img src="./loading/loading-2.svg" alt="Tailoring" class="loader-img">
+                        <img src="./loading/loading-3.svg" alt="Perfecting" class="loader-img">
+                    </div>
+                </div>
+                <p id="loadingMsg">Crafting Your Bespoke Look</p>
+            </div>
+
             <div class="camera-container">
                 <video id="video" autoplay playsinline></video>
                 <img id="gallery-preview" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
@@ -28,17 +43,6 @@
                 </div>                
                 <div class="camera-loading">
                     <div class="spinner"></div>
-                </div>
-
-                <div id="processingOverlay" class="processing-overlay hidden">
-                    <div class="circular-progress">
-                        <svg viewBox="0 0 100 100">
-                            <circle class="bg" cx="50" cy="50" r="45"></circle>
-                            <circle class="fg" cx="50" cy="50" r="45"></circle>
-                        </svg>
-                        <div id="progressPercent" class="progress-text">0%</div>
-                    </div>
-                    <p id="loadingMsg">Generating your look</p>
                 </div>
             </div>
 
