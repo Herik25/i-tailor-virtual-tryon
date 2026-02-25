@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="modal.css">
     <link rel="stylesheet" href="drawer.css">
     <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="share.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
@@ -62,7 +63,7 @@
                 </div>
             </div>
             
-            <div id="toast" class="toast hidden">Link copied to clipboard</div>
+
         </section>
     </div>
 
@@ -260,6 +261,51 @@
                 <div class="spinner"></div>
                 <p>Master Tailor is updating your look...</p>
             </div>
+        </div>
+    </div>
+
+    <!-- Share Drawer -->
+    <div id="shareDrawer" class="share-drawer-overlay">
+        <div class="share-container" id="shareContainer">
+            <button class="share-close" id="closeShareDrawer">
+                <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1.49955 28.8155L15.1573 15.1577M28.815 1.49996L15.1573 15.1577M15.1573 15.1577L1.49955 1.49996M15.1573 15.1577L28.815 28.8155" stroke="#C5BBA9" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            
+            <h2 class="share-title">SHARE THIS OUTFIT</h2>
+            
+            <div class="share-preview-card">
+                <div class="preview-inner">
+                    <div class="preview-img-box">
+                        <img id="sharePreviewImg" src="suit-base.png" alt="Preview">
+                    </div>
+                    <a href="#" class="made-on-link">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11.667 9.99819C11.667 7.92175 9.73619 5.8335 7.38128 5.8335C7.10233 5.8335 6.18286 5.8335 5.95271 5.8335C3.58577 5.8335 1.66699 7.69809 1.66699 9.99819C1.66699 11.9802 3.09176 13.6388 5.00033 14.0597C5.30662 14.1272 5.62538 14.1629 5.95271 14.1629" stroke="#1336BF" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8.33301 9.99791C8.33301 12.0743 10.2638 14.1626 12.6187 14.1626C12.8977 14.1626 13.8171 14.1626 14.0473 14.1626C16.4142 14.1626 18.333 12.298 18.333 9.99791C18.333 8.0159 16.9082 6.35727 14.9997 5.93642C14.6934 5.86888 14.3746 5.83322 14.0473 5.83322" stroke="#1336BF" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        made on iTailor
+                    </a>
+                    <p class="message-text">Just designed this bespoke suit on iTailor. What do you think?</p>
+                    <div class="message-meta">
+                        <span class="message-time">11:54</span>
+                    </div>
+                </div>
+                
+                <div class="reply-bubble">
+                    <p class="reply-text">This looks amazing on you. Very classy.</p>
+                    <div class="reply-footer">
+                        <span class="reply-time">11:54</span>
+                        <div class="checkmarks">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-left: -9px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="share-btn" id="finalShareBtn">SHARE LINK</button>
         </div>
     </div>
 

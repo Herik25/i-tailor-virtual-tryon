@@ -379,21 +379,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- End Drawer Logic ---
 
-    shareLinkBtn.onclick = async () => {
+    // --- Share Drawer Logic ---
+    const shareDrawer = document.getElementById('shareDrawer');
+    const shareContainer = document.getElementById('shareContainer');
+    const closeShareDrawerBtn = document.getElementById('closeShareDrawer');
+    const finalShareBtn = document.getElementById('finalShareBtn');
+    const sharePreviewImg = document.getElementById('sharePreviewImg');
+
+    shareLinkBtn.onclick = () => {
+        // Set background to the whole fabric image path on the drawer container itself
+        const currentPath = swatchImg.src;
+        shareContainer.style.backgroundImage = `url('${currentPath}')`;
+        
+        // Sync preview with current result
+        sharePreviewImg.src = resultImg.src;
+        
+        shareDrawer.classList.add('active');
+        document.body.style.overflow = 'hidden'; 
+    };
+
+    const closeShareDrawer = () => {
+        shareDrawer.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    closeShareDrawerBtn.onclick = closeShareDrawer;
+
+    finalShareBtn.onclick = async () => {
         try {
-            const shareUrl = `${window.location.origin}/preview.html`;
+            const shareUrl = window.location.href;
             await navigator.clipboard.writeText(shareUrl);
             
-            const toast = document.getElementById('toast');
-            toast.classList.remove('hidden');
+            // Premium Toast
+            const tempToast = document.createElement('div');
+            tempToast.className = 'toast';
+            tempToast.textContent = 'LINK COPIED TO CLIPBOARD';
+            tempToast.style.cssText = `
+                position: fixed;
+                bottom: 40px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 20000;
+                background: #00BAF2;
+                color: white;
+                padding: 12px 28px;
+                border-radius: 4px;
+                font-family: 'Outfit', sans-serif;
+                font-weight: 800;
+                letter-spacing: 1.5px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                animation: fadeInUp 0.4s ease forwards;
+            `;
+            document.body.appendChild(tempToast);
             
             setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 2500);
+                tempToast.style.animation = 'fadeOutDown 0.4s ease forwards';
+                setTimeout(() => {
+                    tempToast.remove();
+                    closeShareDrawer();
+                }, 400);
+            }, 1800);
+            
         } catch (err) {
             console.error('Failed to copy: ', err);
+            alert("Error copying link.");
         }
     };
+    // --- End Share Drawer Logic ---
 
     async function getBase64FromUrl(url) {
         const response = await fetch(url);
