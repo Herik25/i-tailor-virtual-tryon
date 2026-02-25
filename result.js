@@ -386,6 +386,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const finalShareBtn = document.getElementById('finalShareBtn');
     const sharePreviewImg = document.getElementById('sharePreviewImg');
 
+    // --- Lightbox Logic ---
+    const expandImageBtn = document.getElementById('expandImageBtn');
+    const imageLightbox = document.getElementById('imageLightbox');
+    const closeLightbox = document.getElementById('closeLightbox');
+    const minimizeLightbox = document.getElementById('minimizeLightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+
+    if (expandImageBtn) {
+        expandImageBtn.onclick = () => {
+            lightboxImg.src = resultImg.src;
+            imageLightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+    }
+
+    const hideLightbox = () => {
+        imageLightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    if (closeLightbox) closeLightbox.onclick = hideLightbox;
+    if (minimizeLightbox) minimizeLightbox.onclick = hideLightbox;
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && imageLightbox.classList.contains('active')) {
+            hideLightbox();
+        }
+    });
+
     shareLinkBtn.onclick = () => {
         // Sync preview with current result
         sharePreviewImg.src = resultImg.src;
