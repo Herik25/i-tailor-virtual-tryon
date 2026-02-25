@@ -12,13 +12,15 @@ document.addEventListener('DOMContentLoaded', () => {
         container.style.transform = 'scale(1)';
     }, 100);
 
-    closeBtn.addEventListener('click', () => {
-        container.style.opacity = '0';
-        container.style.transform = 'scale(0.98)';
-        setTimeout(() => {
-            console.log('UI Closed');
-        }, 500);
-    });
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            container.style.opacity = '0';
+            container.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                console.log('UI Closed');
+            }, 500);
+        });
+    }
 
     const materialSelect = document.getElementById('material-select');
     if (materialSelect) {

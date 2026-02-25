@@ -7,15 +7,23 @@
     <title>iTailor | Your Fresh Look</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="modal.css">
+    <link rel="stylesheet" href="header.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .result-container {
+            flex: 1;
+            height: calc(100vh - 105px);
+        }
+    </style>
 </head>
 <body>
+    <div id="header-placeholder"></div>
     <div class="result-container">
         <div class="result-left">
-            <button id="close-btn" onclick="window.location.href='index.html'" aria-label="Close">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6.75729 17.2426L11.9999 12M17.2426 6.75736L11.9999 12M11.9999 12L6.75729 6.75736M11.9999 12L17.2426 17.2426" stroke="#482A18" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
             <div class="result-content">
                 <h1 class="result-title">A Preview of Your Bespoke Future</h1>
                 <p class="result-text">Your bespoke look, brought to life. Customize your suit further in our state-of-the-art 3D Designer, share it with friends and family, or explore our most sought-after best-selling styles.</p>
@@ -141,6 +149,7 @@
         </div>
     </div>
 
+    <script src="header.js"></script>
     <script type="module" src="result.js"></script>
 </body>
 </html>

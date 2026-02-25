@@ -6,6 +6,7 @@
     <meta name="description" content="iTailor - Preview Your Bespoke Look">
     <title>iTailor | Your Preview</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="header.css">
     <style>
         .preview-page {
             height: 100vh;
@@ -106,12 +107,10 @@
     </style>
 </head>
 <body>
+    <div id="header-placeholder"></div>
     <div class="preview-page">
         <div class="preview-bg"></div>
         <div class="preview-card">
-            <div class="preview-header">
-                <div class="logo-preview">iTAILOR<sup>&reg;</sup></div>
-            </div>
             <img id="previewImg" src="suit-base.png" alt="Your Shared Look" class="preview-img">
             <div class="preview-footer">
                 <h3>Bespoke Masterpiece</h3>
@@ -121,6 +120,7 @@
         </div>
     </div>
 
+    <script src="header.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const previewImg = document.getElementById('previewImg');

@@ -6,23 +6,12 @@
     <meta name="description" content="iTailor Virtual Try-On - Capture your portrait for AI model generation.">
     <title>iTailor | Capture Portrait</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="header.css">
 </head>
 <body>
-    <main class="container">
-        <div class="header">
-            <div class="close-container">
-                <button id="close-btn" aria-label="Close" onclick="window.location.href='index.html'">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6.75729 17.2426L11.9999 12M17.2426 6.75736L11.9999 12M11.9999 12L6.75729 6.75736M11.9999 12L17.2426 17.2426" stroke="#482A18" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-            </div>
-            <div class="logo-container">
-                <span class="logo-main">iTailor<sup>®</sup></span><span class="logo-sub"> presents</span>
-            </div>
-        </div>
-
-        <section class="content capture-content">
+    <div id="header-placeholder"></div>
+    <div class="container capture-container">
+        <main class="capture-content">
             <h1 class="main-title secondary-title">Center Your Face</h1>
             <p class="sub-text">Good lighting & a centered position help us craft your most precise tailored preview.</p>
             
@@ -59,8 +48,9 @@
                 <a href="#" id="gallery-link" class="gallery-link">Upload from Gallery</a>
             </div>
             <canvas id="canvas" style="display: none;"></canvas>
-        </section>
-    </main>
+        </main>
+    </div>
+    <script src="header.js"></script>
     <script type="module" src="capture.js"></script>
 </body>
 </html>
