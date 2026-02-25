@@ -118,7 +118,6 @@ const headerHTML = `
 `;
 
 function initHeader() {
-    // Inject Font Awesome dynamically
     if (!document.querySelector('link[href*="font-awesome"]')) {
         const fa = document.createElement('link');
         fa.rel = 'stylesheet';
@@ -203,10 +202,10 @@ const socialLinks = [
 
 let navList, menuToggle, sidebar, closeBtn, overlay, appBg, submenuPanel;
 
-let activeIndex = 2; // Default to Women's clothing per example
+let activeIndex = 2;
 
 function renderMenu() {
-    navList.innerHTML = ''; // Clear existing
+    navList.innerHTML = '';
     menuItems.forEach((item, index) => {
         const li = document.createElement('li');
         li.classList.add('menu-item');
@@ -214,7 +213,6 @@ function renderMenu() {
             li.classList.add('has-submenu');
         }
         
-        // Background Strip Image
         const bgImg = document.createElement('img');
         bgImg.src = item.bgImage;
         bgImg.classList.add('nav-bg-strip');
@@ -230,7 +228,6 @@ function renderMenu() {
         
         li.appendChild(linkWrapper);
 
-        // Mobile Submenu (Rendered inline)
         if (item.submenu && item.submenu.length > 0) {
             const mobileSubUl = document.createElement('ul');
             mobileSubUl.classList.add('mobile-submenu');
@@ -245,21 +242,17 @@ function renderMenu() {
             li.appendChild(mobileSubUl);
         }
 
-        // Hover Event (Desktop)
         li.addEventListener('mouseenter', () => {
              if (window.innerWidth > 1024) {
                 updateActiveState(index);
              }
         });
 
-        // Click Event (Mobile Accordion)
         linkWrapper.addEventListener('click', (e) => {
             if (window.innerWidth <= 1024 && item.submenu && item.submenu.length > 0) {
                 e.preventDefault();
-                // Toggle Active Class
                 const isActive = li.classList.contains('mobile-active');
                 
-                // Close siblings
                 const siblings = navList.querySelectorAll('li.menu-item');
                 siblings.forEach(sib => {
                     if (sib !== li) {
@@ -282,13 +275,10 @@ function renderMenu() {
         });
 
 
-        // Add stagger effect
         li.style.transitionDelay = `${index * 0.05 + 0.2}s`; 
 
         navList.appendChild(li);
     });
-
-    // Initialize (Desktop)
     if (window.innerWidth > 1024) {
         updateActiveState(activeIndex);
     }
@@ -298,7 +288,6 @@ function updateActiveState(index) {
     if (index >= 0 && index < menuItems.length) {
         activeIndex = index;
         
-        // Update List Items Style
         const lis = navList.querySelectorAll('li.menu-item');
         lis.forEach((li, i) => {
             if (i === index) {
@@ -308,7 +297,6 @@ function updateActiveState(index) {
             }
         });
 
-        // Update Fullscreen Background
         if (sidebar.classList.contains('active')) {
             if (menuItems[index].largeImage) {
                 appBg.style.backgroundImage = `url('${menuItems[index].largeImage}')`;
@@ -321,23 +309,19 @@ function updateActiveState(index) {
 
         updateSubmenu(menuItems[index].submenu);
         
-        // Position submenu panel vertically aligned with active item
         setTimeout(() => {
              const activeLi = lis[index];
              if (activeLi) {
                  const rect = activeLi.getBoundingClientRect();
                  const submenuList = document.querySelector('.submenu-list');
                  if (submenuList) {
-                     // Simple alignment logic
                      let top = rect.top;
-                     // Adjust if too low? 
                      if (top > window.innerHeight - 300) top = window.innerHeight - 300;
                      submenuList.style.marginTop = `${top}px`;
                  }
              }
         }, 50);
     } else {
-        // Clear if invalid index
          submenuPanel.classList.remove('active');
     }
 }
@@ -368,7 +352,6 @@ function updateSubmenu(items) {
     }
 }
 
-// Secondary Navigation
 const secondaryLinks = [
     { text: "About iTailor", isItalic: true },
     { text: "About Us", isItalic: false },
@@ -400,29 +383,25 @@ function renderSecondaryMenu() {
     });
 }
 
-// Function to toggle sidebar
 function toggleMenu() {
     if (!sidebar) return;
     sidebar.classList.toggle('active');
     if (overlay) overlay.classList.toggle('active');
     
-    // Animate items on open
     if (sidebar.classList.contains('active')) {
         const lis = navList.querySelectorAll('li');
         lis.forEach((li, index) => {
              li.style.opacity = '0';
              li.style.transform = 'translateY(10px)';
-             void li.offsetWidth; // Trigger reflow
+             void li.offsetWidth;
              li.style.opacity = '1';
              li.style.transform = 'translateY(0)';
         });
         
-        // Trigger initial active state render
         if (window.innerWidth > 1024) {
             updateActiveState(activeIndex);
         }
     } else {
-        // Reset sub panel when closing main menu
         if (submenuPanel) submenuPanel.classList.remove('active');
         if (appBg) {
             appBg.style.backgroundImage = 'none';
@@ -431,7 +410,6 @@ function toggleMenu() {
     }
 }
 
-// Function to close sidebar
 function closeMenu() {
     if (sidebar) sidebar.classList.remove('active');
     if (overlay) overlay.classList.remove('active');
@@ -442,9 +420,7 @@ function closeMenu() {
     }
 }
 
-// Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
-    // Initializing selections here ensures they are found in the DOM
     navList = document.getElementById('nav-list');
     menuToggle = document.getElementById('menu-toggle');
     sidebar = document.getElementById('sidebar');
@@ -457,7 +433,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Sidebar elements not found. Ensure header.html has #menu-toggle and #sidebar');
         return;
     }
-    // Inject keyframes for submenu if not in CSS
     const styleSheet = document.createElement("style");
     styleSheet.innerText = `
         @keyframes fadeInRight {

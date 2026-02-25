@@ -39,7 +39,7 @@
     background-color: var(--header-dark);
     color: var(--header-white);
     padding: 15px 0;
-    /* height: 70px; */
+
     display: flex;
     align-items: center;
 }
@@ -196,7 +196,6 @@
     gap: 4px;
 }
 
-/* Fullscreen Background */
 .app-bg {
     position: fixed;
     top: 0;
@@ -211,17 +210,16 @@
     pointer-events: none;
 }
 
-/* Sidebar */
 .sidebar {
     position: fixed;
     top: 0;
     left: 0;
-    width: auto; /* Allow growth for submenu */
+    width: auto;
     height: 100vh;
     z-index: 200;
     transform: translateX(-100%);
     transition: transform var(--transition-speed) cubic-bezier(0.77, 0, 0.175, 1);
-    display: flex; /* Row layout for Main + Submenu */
+    display: flex;
     flex-direction: row;
 }
 
@@ -236,14 +234,12 @@
     background-color: var(--bg-sidebar);
     display: flex;
     flex-direction: column;
-    /* justify-content: space-between; */
+
     padding: 40px;
     position: relative;
     z-index: 2;
 }
 
-/* Submenu Panel */
-/* Submenu Panel */
 .submenu-panel {
     width: 0;
     height: 100%;
@@ -261,10 +257,10 @@
     transition: width 0.4s ease;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Align top so JS can push it down */
+    justify-content: flex-start;
     padding-left: 0;
     
-    /* Fade Effect Animation */
+
     opacity: 0;
     animation-duration: 0.4s;
     animation-fill-mode: both;
@@ -272,8 +268,8 @@
 }
 
 .submenu-panel.active {
-    width: 500px; /* Wide enough for the gradient to fade out smoothly */
-    padding-left: 40px; /* Space from the main sidebar */
+    width: 500px;
+    padding-left: 40px;
     animation-name: fadeIn;
 }
 
@@ -291,7 +287,7 @@
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 40px; /* Spacing between items */
+    gap: 40px;
 }
 
 .submenu-list li a {
@@ -319,7 +315,6 @@
     color: #D2B867;
 }
 
-/* Sidebar Header / Close Button */
 .sidebar-header {
     position: absolute;
     z-index: 10;
@@ -333,7 +328,7 @@
     border: none;
     cursor: pointer;
     display: flex;
-    flex-direction: column-reverse; /* Text atop Icon */
+    flex-direction: column-reverse;
     align-items: center;
     gap: 5px;
 }
@@ -377,7 +372,6 @@
     line-height: 1.5;
 }
 
-/* Sidebar Content / Nav List */
 .nav-list {
     list-style: none;
     display: flex;
@@ -398,7 +392,6 @@
     transform: translateY(0);
 }
 
-/* Background Strip for Menu Item (Desktop) */
 .nav-bg-strip {
     position: absolute;
     top: 0;
@@ -417,20 +410,19 @@
     box-shadow: 0 0 10px rgba(128, 128, 128, .4);
 }
 
-/* Menu Item Wrapper */
 .menu-link-wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 22px 0 22px 6rem; /* Standard Desktop Padding */
+    padding: 22px 0 22px 6rem;
     position: relative;
     z-index: 2;
 }
 
 .nav-list a {
     text-decoration: none;
-    color: #987e62; /* Base color */
+    color: #987e62;
     font-size: 0.9rem;
     letter-spacing: 0.25em;
     text-transform: uppercase;
@@ -448,7 +440,6 @@
 }
 
 
-/* Mobile Submenu (Hidden by default) */
 .mobile-submenu {
     list-style: none;
     max-height: 0;
@@ -476,7 +467,6 @@
     color: #fcd176;
 }
 
-/* Secondary Navigation */
 .secondary-nav-list {
     list-style: none;
     margin-top: 20px;
@@ -491,7 +481,7 @@
 
 .secondary-nav-list li a {
     text-decoration: none;
-    color: #7a6b5d; /* Darker muted brown per image */
+    color: #7a6b5d;
     font-size: 0.75rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -504,7 +494,6 @@
     color: #D2B867;
 }
 
-/* Staggered animation delay */
 .sidebar.active .nav-list li:nth-child(1) { transition-delay: 0.1s; }
 .sidebar.active .nav-list li:nth-child(2) { transition-delay: 0.2s; }
 .sidebar.active .nav-list li:nth-child(3) { transition-delay: 0.3s; }
@@ -513,7 +502,6 @@
 .sidebar.active .nav-list li:nth-child(6) { transition-delay: 0.6s; }
 .sidebar.active .nav-list li:nth-child(7) { transition-delay: 0.7s; }
 
-/* Sidebar Footer */
 .sidebar-footer {
     padding-top: 40px;
     padding-bottom: 40px;
@@ -599,9 +587,8 @@
     text-align: center;
 }
 
-/* RESPONSIVE SIDEBAR (Mobile Accordion) */
 @media (max-width: 1024px) {
-    /* Main Layout */
+
     .sidebar-main {
         width: 75vw; 
         max-width: 300px;
@@ -644,7 +631,7 @@
         color: #fcd176;
     }
 
-    /* Menu Items */
+
     .nav-list {
         padding-top: 10px;
         padding-left: 0px;
@@ -668,7 +655,7 @@
         font-size: 1rem;
     }
     
-    /* Plus Sign via CSS */ 
+
     .has-submenu .menu-link-wrapper::after {
         content: '+';
         font-size: 1.4rem;
@@ -679,16 +666,16 @@
         line-height: 1;
     }
 
-    /* Active State (Minus) */
+
     .mobile-active .menu-link-wrapper::after {
-        content: '\2212'; /* Minus sign */
+        content: '\2212';
     }
     
     .mobile-active a {
         color: #fcd176;
     }
 
-    /* Mobile Menu Item Active Effect */
+
     .nav-list li.menu-item.mobile-active .menu-link-wrapper, .nav-list li.menu-item:hover .menu-link-wrapper {
         background-color: #120b09;
     }
@@ -697,23 +684,23 @@
         font-size: 16px;
     }
 
-    /* Target specific header link for color */
+
     .nav-list li.menu-item.mobile-active .menu-link-wrapper a {
         color: #fcd176;
         font-weight: 700;
     }
 
-    /* Target toggle icon */
+
     .nav-list li.menu-item.mobile-active .menu-link-wrapper::after {
         color: #fcd176;
     }
 
-    /* Reset/Ensure li has no bg so submenu contrasts */
+
     .nav-list li.menu-item.mobile-active {
         background-color: transparent;
     }
 
-    /* Submenu Styling */
+
     .mobile-submenu {
         background-color: rgba(0,0,0,0.2);
     }
@@ -729,7 +716,7 @@
 
     .mobile-submenu a {
         display: block;
-        padding: 10px 30px 10px 50px; /* Indent */
+        padding: 10px 30px 10px 50px;
         font-size: 0.8rem;
         color: #7a6b5d;
         text-transform: uppercase;
@@ -738,14 +725,14 @@
     }
 
     .mobile-submenu a:hover {
-        color: #fcd176 !important; /* Force gold on direct hover */
+        color: #fcd176 !important;
     }
 
     .nav-bg-strip {
         display: none !important; 
     }
 
-    /* Secondary Nav */
+
     .secondary-nav-list {
         padding-left: 30px;
         gap: 20px;
@@ -759,7 +746,7 @@
         padding-inline: 2rem;
     }
     
-    /* Hide Desktop Panel */
+
     .submenu-panel {
         display: none !important;
     }
