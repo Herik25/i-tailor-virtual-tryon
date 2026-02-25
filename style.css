@@ -584,7 +584,7 @@ main {
     }
 
     .secondary-title {
-        font-size: 3.5rem;
+        font-size: 2.5rem;
     }
 
     .sub-text {
@@ -607,7 +607,7 @@ main {
     }
     
     .secondary-title {
-        font-size: 2.2rem;
+        font-size: 2rem;
     }
 
     .camera-container {
@@ -615,8 +615,8 @@ main {
     }
 
     .face-oval {
-        width: 65%;
-        height: 75%;
+        width: 45%;
+        height: 65%;
     }
     
     #create-btn, #capture-btn {
