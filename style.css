@@ -5,6 +5,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Future';
+    src: url('./fonts/futura medium bt.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root {
     --primary-color: #2EB2E2;
     --text-color: #4A3728;
@@ -45,23 +52,32 @@ body {
 main {
     flex: 1;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 2rem;
+    position: relative;
 }
 
 .content {
-    max-width: 800px;
     width: 100%;
+    margin-top: -50px;
+}
+
+.buttons-icon {
+    width: 120px;
+    height: auto;
 }
 
 .main-title {
-    font-size: 6rem;
-    line-height: 88%;
+    font-family: 'Proxima Nova', sans-serif;
+    font-size: 3.5rem;
     margin-bottom: 1rem;
-    font-weight: 400;
-    letter-spacing: -0.5px;
+    font-weight: 600;
+    letter-spacing: 16%;
+    text-transform: uppercase;
+    color: var(--text-color);
 }
 
 .secondary-title {
@@ -70,32 +86,44 @@ main {
 }
 
 .sub-text {
-    font-size: 1rem;
-    max-width: 650px;
+    font-size: 1.25rem;
+    font-family: 'Future';
     margin: 0 auto 2rem;
     line-height: 125%;
     color: var(--text-color);
-    letter-spacing: 0.2px;
-    font-family: 'Proxima Nova', sans-serif;
+    letter-spacing: 10%;
 }
 
 #create-btn, #capture-btn {
     background-color: var(--primary-color);
     border: none;
     color: white;
-    padding: 1rem 2.5rem;
-    font-size: 1rem;
+    padding: 0.7rem 3rem;
+    font-size: 1.1rem;
     font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #create-btn:hover, #capture-btn:hover {
+    filter: brightness(1.1);
     transform: translateY(-2px);
 }
 
-#create-btn:active, #capture-btn:active {
-    transform: translateY(0);
+.footer-trust {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.trust-pilot-img {
+    width: auto;
 }
 
 .material-selection {
@@ -546,8 +574,8 @@ main {
     }
     
     .main-title {
-        margin-bottom: 0.7rem;
-        font-size: 5rem;
+        font-size: 2rem;
+        margin-bottom: 1rem;
     }
 
     .secondary-title {
@@ -566,11 +594,11 @@ main {
 
 @media (max-width: 480px) {
     .main-title {
-        font-size: 3rem;
+        font-size: 1.7rem;
     }
 
     .sub-text {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
     
     .secondary-title {
