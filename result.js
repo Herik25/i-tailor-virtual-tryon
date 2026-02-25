@@ -387,10 +387,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const sharePreviewImg = document.getElementById('sharePreviewImg');
 
     shareLinkBtn.onclick = () => {
-        // Set background to the whole fabric image path on the drawer container itself
-        const currentPath = swatchImg.src;
-        shareContainer.style.backgroundImage = `url('${currentPath}')`;
-        
         // Sync preview with current result
         sharePreviewImg.src = resultImg.src;
         
@@ -407,7 +403,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     finalShareBtn.onclick = async () => {
         try {
-            const shareUrl = window.location.href;
+            // Construct the path to preview.html in the same directory
+            const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+            const shareUrl = baseUrl + 'preview.html';
             await navigator.clipboard.writeText(shareUrl);
             
             // Premium Toast
