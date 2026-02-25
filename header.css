@@ -45,10 +45,9 @@
 }
 
 .header-container {
-    max-width: 1440px;
     width: 100%;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 80px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -157,7 +156,7 @@
 
 @media (max-width: 1024px) {
     .header-container {
-        padding: 0 20px;
+        padding: 0 40px;
     }
     
     .header-actions {
@@ -170,6 +169,10 @@
 }
 
 @media (max-width: 768px) {
+    .header-container {
+        padding: 0 20px;
+    }
+
     .header-announcement-bar {
         font-size: 11px;
     }

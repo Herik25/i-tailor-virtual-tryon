@@ -1,0 +1,401 @@
+.drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.drawer-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.drawer-container {
+    position: fixed;
+    top: 0;
+    left: -50%;
+    width: 50%;
+    height: 100%;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.1);
+    background: url('modal-bg.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.drawer-overlay.active .drawer-container {
+    left: 0;
+}
+
+.drawer-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: 1px solid #482A1880;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+    padding: 8px;
+}
+
+.drawer-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.drawer-header-container {
+    padding: 4rem 5rem 1rem;
+}
+
+.drawer-title-group h2 {
+    font-size: 2rem;
+    color: #FFF1D6;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 0.35rem;
+    font-family: 'Proxima Nova', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.drawer-title-group p {
+    font-size: 1.25rem;
+    color: #FFF1D6;
+    line-height: 135%;
+    font-family: 'Proxima Nova', sans-serif;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+}
+
+.advanced-search-trigger {
+    color: #FFD89B;
+    font-weight: 800;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    display: inline-block;
+    font-family: 'Proxima Nova', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.drawer-filter-row-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    margin-bottom: 0;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    pointer-events: none;
+}
+
+.drawer-filter-row-top.active {
+    max-height: 200px;
+    opacity: 1;
+    margin-bottom: 1.25rem;
+    pointer-events: all;
+    padding-inline: 2px;
+}
+
+.drawer-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.drawer-filter-group label {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 96%;
+    color: #FFF1D6;
+    font-family: 'Proxima Nova', sans-serif;
+}
+
+.drawer-filter-group label.white-label {
+    color: #FFF1D6;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.color-group, .search-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.color-swatches {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.swatch {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.4);
+    cursor: pointer;
+    padding: 0;
+}
+
+.swatch.all {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+    background: transparent;
+    color: #fff;
+    border: 1.5px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+}
+
+.swatch.black { background: #000; }
+.swatch.navy { background: #000040; }
+.swatch.light-blue { background: #4D6D9A; }
+.swatch.yellow { background: #FFEB3B; }
+.swatch.sky-blue { background: #81D4FA; }
+.swatch.purple { background: #673AB7; }
+.swatch.red { background: #F44336; }
+.swatch.brown { background: #5D4037; }
+.swatch.green { background: #4CAF50; }
+.swatch.pink { background: #F48FB1; }
+.swatch.olive { background: #689F38; }
+.swatch.dark-red { background: #B71C1C; }
+.swatch.cream { background: #FFF9C4; }
+.swatch.white { background: #FFF; }
+.swatch.rainbow { background: conic-gradient(red, orange, yellow, green, cyan, blue, violet, red); }
+
+.search-input-wrapper input {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    padding: 0.6rem 0.8rem;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    outline: none;
+    width: 150px;
+    font-size: 1rem;
+}
+
+.search-input-wrapper input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.drawer-filters-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.25rem;
+    align-items: center;
+}
+
+.drawer-container .custom-select {
+    min-width: 180px;
+}
+
+.drawer-container .select-trigger {
+    background: #3B2416;
+    border: none;
+    color: #fff;
+    padding: 0.8rem 1.2rem;
+    font-weight: 500;
+    font-size: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.drawer-body {
+    padding: 0 5rem;
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.drawer-body::-webkit-scrollbar {
+    display: none; /* Webkit browsers */
+}
+
+.drawer-grid-wrapper {
+    background: #FFFFFF73;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.drawer-container .material-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.drawer-container .material-card {
+    position: relative;
+    aspect-ratio: 1;
+    background: #000;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.drawer-container .material-card.selected {
+    outline: 4px solid #00AEEF;
+    outline-offset: -4px;
+}
+
+.drawer-container .material-thumb {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.drawer-container .material-info-overlay {
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.drawer-container .material-name-overlay {
+    font-size: 12px;
+    font-family: 'Proxima Nova', sans-serif;
+    font-weight: 600;
+    line-height: 136%;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+    max-width: 80%;
+}
+
+.drawer-container .material-price-overlay {
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+.drawer-container .original-price {
+    font-family: 'Century Gothic', sans-serif;
+    color: #93DCFF;
+    font-weight: 400;
+    text-decoration: line-through;
+    margin-right: 5px;
+    line-height: 135%;
+    letter-spacing: -5%;
+}
+
+.drawer-container .current-price.sale {
+    color: #AD0000;
+    font-weight: 700;
+    font-family: 'Century Gothic', sans-serif;
+    line-height: 135%;
+    letter-spacing: -5%;
+}
+
+.drawer-container .promo-ribbon {
+    position: absolute;
+    top: 10px;
+    left: -20px;
+    background: #800000;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 3px 25px;
+    transform: rotate(-45deg);
+    z-index: 5;
+    text-transform: uppercase;
+    box-shadow: 0px 1px 3.4px 0px #000000;
+}
+
+.drawer-container .grid-selected-badge {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    transform: translateY(-50%);
+    font-family: 'Proxima Nova', sans-serif;
+    background: #482A18;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 0;
+    text-align: center;
+    text-transform: uppercase;
+    z-index: 10;
+    letter-spacing: 1.5px;
+}
+
+.drawer-footer {
+    padding: 1.5rem 5rem 2.5rem;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.drawer-btn {
+    padding: 1rem 1.4rem;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 10%;
+    border-radius: 2px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Proxima Nova', sans-serif;
+}
+
+.drawer-btn.btn-confirm {
+    background: #fff;
+    color: #3B2416;
+}
+
+.drawer-btn.btn-confirm:hover { background: #f8f8f8; }
+
+.drawer-btn.btn-cancel {
+    background: #00AEEF;
+    color: #fff;
+}
+
+.drawer-btn.btn-cancel:hover { background: #009BD6; }
+
+.drawer-loading-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 3000;
+}
+
+.drawer-loading-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+@media (max-width: 900px) {
+    .drawer-container { width: 100%; left: -100%; }
+}

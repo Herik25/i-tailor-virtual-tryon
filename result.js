@@ -6,7 +6,7 @@ const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const materials = [
     { name: "Black Suit", file: "materials/Black Suit.jpg", price: 239, originalPrice: 259, promo: true, color: "black", fabricNo: "SK-001", pattern: "Solid", composition: "Premium Cotton", season: "All Season" },
     { name: "Olive Suit", file: "materials/Olive Suit.jpg", price: 239, originalPrice: 259, promo: true, color: "olive", fabricNo: "3682-4", pattern: "Solid", composition: "Wool Blend", season: "Summer" },
-    { name: "Dark Navy (Color: Navy)", file: "materials/Dark Navy.jpg", price: 259, color: "navy", fabricNo: "3799-2", pattern: "Solid", composition: "Wool Blend", season: "All Season" },
+    { name: "Dark Navy", file: "materials/Dark Navy.jpg", price: 259, color: "navy", fabricNo: "3799-2", pattern: "Solid", composition: "Wool Blend", season: "All Season" },
     { name: "Light Navy", file: "materials/Light Navy.jpg", price: 259, color: "blue", fabricNo: "4122-1", pattern: "Solid", composition: "Premium Cotton", season: "Summer" },
     { name: "Brown Suit", file: "materials/BROWN Suit.jpg", price: 259, color: "brown", fabricNo: "BR-552", pattern: "Solid", composition: "Wool Blend", season: "Winter" },
     { name: "Textured Light Gray", file: "materials/Textured Light Gray.jpg", price: 259, color: "gray", fabricNo: "GR-901", pattern: "Textured", composition: "Wool Blend", season: "Winter" },
@@ -41,28 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize Fabric Card with current material
     function updateFabricCard(material) {
-        try {
-            if (!material) {
-                const currentPath = localStorage.getItem('selectedMaterialPath') || "materials/Dark Navy.jpg";
-                console.log("iTailor: Finding dynamic material for path:", currentPath);
-                material = materials.find(m => m.file === currentPath) || materials[2];
-            }
-            
-            if (material) {
-                console.log("iTailor: Syncing fabric card with:", material.fabricNo, "-", material.name);
-                if (swatchImg) swatchImg.src = material.file;
-                if (fabricCodeEl) fabricCodeEl.textContent = material.fabricNo;
-                if (fabricNameEl) fabricNameEl.textContent = material.name.toUpperCase();
-                if (fabricDetailEl) fabricDetailEl.textContent = `${material.pattern}, ${material.composition}`;
-            } else {
-                console.warn("iTailor: No material found to sync card data.");
-            }
-        } catch (err) {
-            console.error("iTailor: Error updating dynamic fabric card:", err);
+        if (!material) {
+            const currentPath = localStorage.getItem('selectedMaterialPath') || "materials/Dark Navy.jpg";
+            material = materials.find(m => m.file === currentPath) || materials[2];
         }
+        swatchImg.src = material.file;
+        fabricCodeEl.textContent = material.fabricNo;
+        fabricNameEl.textContent = material.name.toUpperCase();
+        fabricDetailEl.textContent = `${material.pattern}, ${material.composition}`;
     }
 
-    console.log("iTailor: Initializing results page UI...");
     updateFabricCard();
 
     let currentFilters = {
@@ -189,7 +177,9 @@ document.addEventListener('DOMContentLoaded', () => {
         materialModal.classList.add('active');
     };
 
-    openModalBtn.onclick = openModal;
+    openModalBtn.onclick = () => {
+        window.location.href = "https://www.itailor.com/custom-suits/?fabric=3799-20";
+    };
     tryMoreBtn.onclick = openModal;
 
     const closePopup = () => {
@@ -224,6 +214,170 @@ document.addEventListener('DOMContentLoaded', () => {
             confirmBtn.disabled = false;
         }
     };
+
+    // --- Drawer Logic ---
+    const fabricDrawer = document.getElementById('fabricDrawer');
+    const closeDrawerBtn = document.getElementById('closeDrawer');
+    const cancelDrawerBtn = document.getElementById('cancelDrawerBtn');
+    const confirmDrawerBtn = document.getElementById('confirmDrawerBtn');
+    const drawerMaterialGrid = document.getElementById('drawerMaterialGrid');
+    const drawerLoader = document.getElementById('drawerLoader');
+    const drawerAdvancedSearchToggle = document.getElementById('drawerAdvancedSearchToggle');
+    const drawerFiltersContainer = document.querySelector('.drawer-filter-row-top');
+
+    let drawerSelectedMaterial = null;
+    let drawerFilters = {
+        color: 'all',
+        search: '',
+        pattern: 'all',
+        season: 'all'
+    };
+
+    function renderDrawerMaterials() {
+        drawerMaterialGrid.innerHTML = '';
+        const filtered = materials.filter(mat => {
+            const matchesColor = drawerFilters.color === 'all' || mat.color === drawerFilters.color;
+            const matchesSearch = mat.fabricNo.toLowerCase().includes(drawerFilters.search.toLowerCase()) || mat.name.toLowerCase().includes(drawerFilters.search.toLowerCase());
+            const matchesPattern = drawerFilters.pattern === 'all' || mat.pattern === drawerFilters.pattern;
+            const matchesSeason = drawerFilters.season === 'all' || mat.season === drawerFilters.season;
+            return matchesColor && matchesSearch && matchesPattern && matchesSeason;
+        });
+
+        if (filtered.length === 0) {
+            drawerMaterialGrid.innerHTML = '<div class="no-results">No fabrics match your selection.</div>';
+            return;
+        }
+
+        filtered.forEach(mat => {
+            const card = document.createElement('div');
+            const isSelected = drawerSelectedMaterial === mat;
+            card.className = `material-card ${isSelected ? 'selected' : ''}`;
+            
+            const promoHtml = mat.promo ? `<div class="promo-ribbon">PROMO</div>` : '';
+            const selectedHtml = isSelected ? `<div class="grid-selected-badge">SELECTED FABRIC</div>` : '';
+            const priceHtml = mat.originalPrice 
+                ? `<span class="original-price">$${mat.originalPrice}</span> <span class="current-price sale">$${mat.price}</span>`
+                : `<span class="current-price">$${mat.price}</span>`;
+
+            card.innerHTML = `
+                <div class="material-thumb" style="background-image: url('${mat.file}')"></div>
+                ${promoHtml}
+                ${selectedHtml}
+                <div class="material-info-overlay">
+                    <div class="material-name-overlay">${mat.name.toUpperCase()}</div>
+                    <div class="material-price-overlay">${priceHtml}</div>
+                </div>
+            `;
+            card.onclick = () => {
+                drawerMaterialGrid.querySelectorAll('.material-card').forEach(c => c.classList.remove('selected'));
+                drawerMaterialGrid.querySelectorAll('.grid-selected-badge').forEach(b => b.remove());
+                
+                card.classList.add('selected');
+                const badge = document.createElement('div');
+                badge.className = 'grid-selected-badge';
+                badge.textContent = 'SELECTED FABRIC';
+                card.appendChild(badge);
+                
+                drawerSelectedMaterial = mat;
+                cancelDrawerBtn.disabled = false;
+            };
+            drawerMaterialGrid.appendChild(card);
+        });
+    }
+
+    const drawerDrawerContainer = fabricDrawer.querySelector('.drawer-container');
+
+    // Drawer Filters Logic
+    fabricDrawer.querySelectorAll('.swatch').forEach(swatch => {
+        swatch.onclick = () => {
+            fabricDrawer.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+            swatch.classList.add('active');
+            drawerFilters.color = swatch.dataset.color;
+            renderDrawerMaterials();
+        };
+    });
+
+    function initDrawerSelect(selectId, filterKey) {
+        const select = document.getElementById(selectId);
+        const trigger = select.querySelector('.select-trigger');
+        const triggerText = trigger.querySelector('span');
+        const options = select.querySelectorAll('.option');
+
+        trigger.onclick = (e) => {
+            e.stopPropagation();
+            fabricDrawer.querySelectorAll('.custom-select').forEach(s => {
+                if (s !== select) s.classList.remove('open');
+            });
+            select.classList.toggle('open');
+        };
+
+        options.forEach(opt => {
+            opt.onclick = () => {
+                triggerText.innerText = opt.innerText;
+                drawerFilters[filterKey] = opt.dataset.value;
+                options.forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+                select.classList.remove('open');
+                renderDrawerMaterials();
+            };
+        });
+    }
+
+    initDrawerSelect('drawerPatternSelect', 'pattern');
+    initDrawerSelect('drawerSeasonSelect', 'season');
+
+    document.getElementById('drawerFabricSearch').oninput = (e) => {
+        drawerFilters.search = e.target.value;
+        renderDrawerMaterials();
+    };
+
+    drawerAdvancedSearchToggle.onclick = () => {
+        const isActive = drawerFiltersContainer.classList.toggle('active');
+        drawerAdvancedSearchToggle.classList.toggle('active');
+        // drawerAdvancedSearchToggle.innerHTML = isActive ? 'ADVANCE SEARCH <<' : 'ADVANCE SEARCH >>';
+    };
+
+    const openDrawer = (e) => {
+        e.preventDefault();
+        fabricDrawer.classList.add('active');
+        renderDrawerMaterials();
+    };
+
+    const closeDrawer = () => {
+        fabricDrawer.classList.remove('active');
+        drawerFiltersContainer.classList.remove('active');
+        drawerAdvancedSearchToggle.classList.remove('active');
+        drawerSelectedMaterial = null;
+        cancelDrawerBtn.disabled = true;
+    };
+
+    tryMoreBtn.onclick = openDrawer;
+    closeDrawerBtn.onclick = closeDrawer;
+    confirmDrawerBtn.onclick = () => {
+        // Shop Look button does nothing for now
+        console.log("Shop look clicked - no action defined");
+    };
+
+    cancelDrawerBtn.onclick = async () => {
+        if (!drawerSelectedMaterial) return;
+        drawerLoader.classList.add('active');
+        cancelDrawerBtn.disabled = true;
+
+        try {
+            await regenerateLook(drawerSelectedMaterial);
+            updateFabricCard(drawerSelectedMaterial);
+            localStorage.setItem('selectedMaterialPath', drawerSelectedMaterial.file);
+            closeDrawer();
+        } catch (error) {   
+            console.error(error);
+            alert("Regeneration failed.");
+        } finally {
+            drawerLoader.classList.remove('active');
+            cancelDrawerBtn.disabled = false;
+        }
+    };
+
+    // --- End Drawer Logic ---
 
     shareLinkBtn.onclick = async () => {
         try {

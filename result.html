@@ -7,7 +7,11 @@
     <title>iTailor | Your Fresh Look</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="modal.css">
+    <link rel="stylesheet" href="drawer.css">
     <link rel="stylesheet" href="header.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="header-placeholder"></div>
@@ -60,6 +64,108 @@
             
             <div id="toast" class="toast hidden">Link copied to clipboard</div>
         </section>
+    </div>
+
+    <!-- Fabric Side Drawer -->
+    <div id="fabricDrawer" class="drawer-overlay">
+        <div class="drawer-container">
+            <button class="drawer-close" id="closeDrawer" aria-label="Close drawer">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.75729 17.2426L11.9999 12M17.2426 6.75736L11.9999 12M11.9999 12L6.75729 6.75736M11.9999 12L17.2426 17.2426" stroke="#482A18" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            
+            <div class="drawer-header-container">
+                <div class="drawer-title-group">
+                    <h2>SELECT FABRIC</h2>
+                    <p>Experience our premium range of bespoke suit fabrics</p>
+                </div>
+                
+                <div class="advanced-search-trigger" id="drawerAdvancedSearchToggle">
+                    ADVANCE SEARCH >>
+                </div>
+                
+                <div class="drawer-filter-row-top">
+                    <div class="drawer-filter-group color-group">
+                        <label>Color:</label>
+                        <div class="color-swatches" id="drawerColorFilter">
+                            <button class="swatch all active" data-color="all">All</button>
+                            <button class="swatch black" data-color="black"></button>
+                            <button class="swatch navy" data-color="navy"></button>
+                            <button class="swatch light-blue" data-color="light-blue"></button>
+                            <button class="swatch yellow" data-color="yellow"></button>
+                            <button class="swatch sky-blue" data-color="sky-blue"></button>
+                            <button class="swatch purple" data-color="purple"></button>
+                            <button class="swatch red" data-color="red"></button>
+                            <button class="swatch brown" data-color="brown"></button>
+                            <button class="swatch green" data-color="green"></button>
+                            <button class="swatch pink" data-color="pink"></button>
+                            <button class="swatch olive" data-color="olive"></button>
+                            <button class="swatch dark-red" data-color="dark-red"></button>
+                            <button class="swatch cream" data-color="cream"></button>
+                            <button class="swatch white" data-color="white"></button>
+                            <button class="swatch rainbow" data-color="all"></button>
+                        </div>
+                    </div>
+                    <div class="drawer-filter-group search-group">
+                        <label>Search:</label>
+                        <div class="search-input-wrapper">
+                            <input type="text" id="drawerFabricSearch" placeholder="Fabric No.">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="drawer-filters-section">
+                    <div class="drawer-filter-group">
+                        <label class="white-label">Patterns:</label>
+                        <div class="custom-select" id="drawerPatternSelect">
+                            <div class="select-trigger">
+                                <span>All</span>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                            <div class="select-options">
+                                <div class="option active" data-value="all">All</div>
+                                <div class="option" data-value="Solid">Solid</div>
+                                <div class="option" data-value="Textured">Textured</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="drawer-filter-group">
+                        <label class="white-label">Season:</label>
+                        <div class="custom-select" id="drawerSeasonSelect">
+                            <div class="select-trigger">
+                                <span>Four season</span>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                            <div class="select-options">
+                                <div class="option active" data-value="all">Four season</div>
+                                <div class="option" data-value="All Season">All Season</div>
+                                <div class="option" data-value="Summer">Summer</div>
+                                <div class="option" data-value="Winter">Winter</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="drawer-body">
+                <div class="drawer-grid-wrapper">
+                    <div class="material-grid" id="drawerMaterialGrid">
+                        <!-- Materials injected here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="drawer-footer">
+                <button class="drawer-btn btn-cancel" id="confirmDrawerBtn">SHOP THIS LOOK</button>
+                <button class="drawer-btn btn-confirm" id="cancelDrawerBtn" disabled>CRAFT MY SUIT</button>
+            </div>
+            
+            <div id="drawerLoader" class="drawer-loading-overlay">
+                <div class="spinner"></div>
+                <p>Master Tailor is updating your look...</p>
+            </div>
+        </div>
     </div>
 
     <!-- Material Selector Modal -->
