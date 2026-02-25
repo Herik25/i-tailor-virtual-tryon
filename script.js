@@ -20,13 +20,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 500);
     });
 
-    createBtn.addEventListener('click', () => {
-        const materialSelect = document.getElementById('material-select');
-        if (materialSelect) {
+    const materialSelect = document.getElementById('material-select');
+    if (materialSelect) {
+        if (!localStorage.getItem('selectedMaterialPath')) {
             localStorage.setItem('selectedMaterialPath', materialSelect.value);
         }
-        // Clear previous results to avoid confusion
+
+        materialSelect.addEventListener('change', (e) => {
+            const val = e.target.options[e.target.selectedIndex].value;
+            localStorage.setItem('selectedMaterialPath', val);
+            console.log("iTailor: Selection updated to", val);
+        });
+    }
+
+    createBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        if (materialSelect) {
+            const val = materialSelect.options[materialSelect.selectedIndex].value;
+            localStorage.setItem('selectedMaterialPath', val);
+        }
+        
         localStorage.removeItem('generatedLook');
-        window.location.href = 'capture.html';
+        
+        console.log("iTailor: Navigating with material:", localStorage.getItem('selectedMaterialPath'));
+        
+        setTimeout(() => {
+            window.location.href = 'capture.html';
+        }, 50);
     });
 });

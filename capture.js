@@ -38,9 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
         materialLoadedPromise = new Promise(async (resolve, reject) => {
             try {
                 const selectedPath = localStorage.getItem('selectedMaterialPath') || "materials/Black Suit.jpg";
-                // console.log("iTailor: Loading initial material from", selectedPath);
                 
-                const response = await fetch(selectedPath);
+                const response = await fetch(encodeURI(selectedPath));
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 
                 const blob = await response.blob();
