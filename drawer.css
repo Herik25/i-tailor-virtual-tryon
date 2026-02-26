@@ -17,6 +17,11 @@
     visibility: visible;
 }
 
+/* Hidden by default, shown in mobile/tablet queries */
+.drawer-floating-preview {
+    display: none;
+}
+
 .drawer-container {
     position: fixed;
     top: 0;
@@ -205,9 +210,9 @@
     align-items: center;
 }
 
-.drawer-container .custom-select {
+/* .drawer-container .custom-select {
     min-width: 180px;
-}
+} */
 
 .drawer-container .select-trigger {
     background: #3B2416;
@@ -396,6 +401,258 @@
     visibility: visible;
 }
 
-@media (max-width: 900px) {
-    .drawer-container { width: 100%; left: -100%; }
+@media (max-width: 768px) {
+    .drawer-overlay {
+        backdrop-filter: blur(10px);
+    }
+
+    .drawer-container {
+        width: 100%;
+        left: -100%;
+        background-image: url('modal-bg.png'); /* Maintain background if needed, or use a textured one */
+        background-color: #EDE4D3; /* A lighter base for the "parchment" look in the image */
+        box-shadow: none;
+    }
+
+    .drawer-header-container {
+        padding: 2.5rem 1.5rem 1rem;
+        text-align: center;
+    }
+
+    .drawer-title-group h2 {
+        font-size: 1.6rem;
+        color: #fff;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        margin-bottom: 0.2rem;
+        letter-spacing: 1px;
+    }
+
+    .drawer-title-group p {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 1rem;
+        text-shadow: none;
+    }
+
+    .advanced-search-trigger {
+        font-size: 1.1rem;
+        color: #D4AF37; /* Gold color from image */
+        margin-bottom: 0.8rem;
+        letter-spacing: 1px;
+    }
+
+    .drawer-filter-row-top.active {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 0.5rem;
+        max-height: unset;
+        opacity: 1;
+        margin-bottom: 1rem;
+    }
+
+    .drawer-filter-group.color-group {
+        flex: 1;
+        gap: 5px;
+    }
+
+    .drawer-filter-group label {
+        font-size: 11px;
+        color: #D4AF37;
+    }
+
+    .color-swatches {
+        gap: 4px;
+        flex-wrap: wrap;
+    }
+
+    .swatch {
+        width: 14px;
+        height: 14px;
+    }
+
+    .swatch.all {
+        width: 14px;
+        height: 14px;
+        font-size: 8px;
+    }
+
+    .drawer-filter-group.search-group {
+        width: 80px;
+    }
+
+    .search-input-wrapper input {
+        width: 100%;
+        padding: 4px 8px;
+        font-size: 0.7rem;
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    .drawer-filters-section {
+        background: rgba(72, 42, 24, 0.8); /* Dark brown bar from image */
+        padding: 0.6rem 1rem;
+        gap: 1rem;
+        margin: 0 -1.5rem 0.5rem; /* Full width */
+    }
+
+    .drawer-filter-group label.white-label {
+        font-size: 0.9rem;
+        color: #fff;
+    }
+
+    .drawer-container .custom-select {
+        min-width: unset;
+        flex: 1;
+    }
+
+    .drawer-container .select-trigger {
+        padding: 4px 10px;
+        font-size: 0.9rem;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .drawer-body {
+        padding: 0 1rem;
+        position: relative;
+    }
+
+    .drawer-grid-wrapper {
+        padding: 0.8rem;
+        margin-top: 0;
+        border-radius: 4px;
+        max-height: 98%;
+        overflow-y: auto;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+    }
+
+    .drawer-grid-wrapper::-webkit-scrollbar {
+        display: none; /* Chrome/Safari/Webkit */
+    }
+
+    .drawer-container .material-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8rem;
+    }
+
+    .drawer-container .material-card {
+        border-radius: 2px;
+    }
+
+    .drawer-container .material-info-overlay {
+        padding-bottom: 5px;
+        background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+    }
+
+    .drawer-container .material-name-overlay {
+        font-size: 10px;
+        margin-bottom: 2px;
+    }
+
+    .drawer-container .material-price-overlay {
+        font-size: 9px;
+    }
+
+    .drawer-container .promo-ribbon {
+        font-size: 7px;
+        padding: 2px 15px;
+        top: 6px;
+        left: -15px;
+    }
+
+    /* Floating Preview Image - Pinned to bottom left */
+    .drawer-floating-preview {
+        display: block;
+        position: absolute;
+        bottom: 80px;
+        left: -10px;
+        width: 240px;
+        aspect-ratio: 1/1.5;
+        background: #fff;
+        padding: 4px;
+        border-radius: 6px;
+        z-index: 2000; /* High z-index to stay on top of the grid */
+        pointer-events: none; /* Allow scrolling fabrics even if they are behind the image */
+        animation: slideInLeft 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .drawer-floating-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 2px;
+    }
+
+    @keyframes slideInLeft {
+        from { transform: translateX(-20px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+
+    .drawer-footer {
+        padding: 0;
+        gap: 0;
+        margin-top: auto;
+    }
+
+    .drawer-btn {
+        flex: 1;
+        padding: 1.2rem;
+        font-size: 0.85rem;
+        border-radius: 0;
+    }
+
+    .drawer-btn.btn-cancel {
+        background: #00BAF2; /* Cyan from image */
+        color: #fff;
+    }
+
+    .drawer-btn.btn-confirm {
+        background: #fff;
+        color: #3B2416;
+        border-top: 1px solid #ddd;
+    }
 }
+
+/* Tablet Optimizations (Restored & Refined) */
+@media (min-width: 769px) and (max-width: 1200px) {
+    .drawer-container {
+        width: 70%;
+        left: -70%;
+    }
+
+    .drawer-overlay.active .drawer-container {
+        left: 0;
+    }
+
+    .drawer-header-container, .drawer-body, .drawer-footer {
+        padding-left: 3rem;
+        padding-right: 3rem;
+    }
+
+    .drawer-floating-preview {
+        display: block;
+        position: absolute;
+        bottom: 120px;
+        left: 20px;
+        width: 140px;
+        aspect-ratio: 1/1.5;
+        background: #fff;
+        padding: 5px;
+        border-radius: 6px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        z-index: 2000;
+        pointer-events: none;
+        animation: slideInLeft 0.5s ease;
+    }
+
+    .drawer-floating-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 2px;
+    }
+}
+

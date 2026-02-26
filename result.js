@@ -339,6 +339,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const openDrawer = (e) => {
         e.preventDefault();
+        const drawerPreviewImg = document.getElementById('drawerPreviewImg');
+        if (drawerPreviewImg) drawerPreviewImg.src = resultImg.src;
         fabricDrawer.classList.add('active');
         renderDrawerMaterials();
     };
@@ -367,6 +369,8 @@ document.addEventListener('DOMContentLoaded', () => {
             await regenerateLook(drawerSelectedMaterial);
             updateFabricCard(drawerSelectedMaterial);
             localStorage.setItem('selectedMaterialPath', drawerSelectedMaterial.file);
+            const drawerPreviewImg = document.getElementById('drawerPreviewImg');
+            if (drawerPreviewImg) drawerPreviewImg.src = resultImg.src;
             closeDrawer();
         } catch (error) {   
             console.error(error);
