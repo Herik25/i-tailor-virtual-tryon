@@ -17,7 +17,6 @@
 <body>
     <div id="header-placeholder"></div>
     <div class="result-container">
-        <!-- Left Content Section -->
         <section class="result-left">
             <div class="result-content">
                 <h1 class="result-title">A Preview Of Your<br/>Bespoke Future</h1>
@@ -28,18 +27,15 @@
                 </div>
             </div>
 
-            <!-- Trustpilot Footer -->
             <div class="trustpilot-footer">
                 <img src="./trust-pilot.svg" alt="Trustpilot reviews" class="tp-img">
             </div>
         </section>
 
-        <!-- Right Image Section -->
         <section class="result-right">
             <div class="image-frame">
                 <img id="finalGeneratedImage" src="suit-base.png" alt="Your Generated Look" class="result-image">
                 
-                <!-- Share Icon -->
                 <button id="shareLinkBtn" class="share-icon-btn" aria-label="Share">
                     <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g opacity="0.6">
@@ -48,7 +44,6 @@
                     </svg>
                 </button>
 
-                <!-- Expand Icon -->
                 <button id="expandImageBtn" class="expand-btn" aria-label="Expand Image">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M4 8V4H8" stroke="#482A18" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -58,7 +53,6 @@
                     </svg>
                 </button>
 
-                <!-- Fabric Card -->
                 <div class="fabric-card">
                     <div class="fabric-swatch-container">
                         <img id="selectedSwatchImg" src="materials/Dark Navy.jpg" alt="Selected Fabric">
@@ -73,11 +67,10 @@
                 </div>
             </div>
             
-            <!-- Lightbox Overlay -->
             <div id="imageLightbox" class="lightbox-overlay">
                 <button id="closeLightbox" class="lightbox-close" aria-label="Close Lightbox">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M18 6L6 18M6 6L18 18" stroke="#482A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
                 <div class="lightbox-content">
@@ -85,10 +78,10 @@
                 </div>
                 <button id="minimizeLightbox" class="lightbox-minimize" aria-label="Minimize Lightbox">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 4V8H4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M16 4V8H20" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M8 20V16H4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M16 20V16H20" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 4V8H4" stroke="#482A18" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 4V8H20" stroke="#482A18" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 20V16H4" stroke="#482A18" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 20V16H20" stroke="#482A18" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </button>
             </div>
@@ -96,7 +89,6 @@
         </section>
     </div>
 
-    <!-- Fabric Side Drawer -->
     <div id="fabricDrawer" class="drawer-overlay">
         <div class="drawer-container">
             <button class="drawer-close" id="closeDrawer" aria-label="Close drawer">
@@ -202,7 +194,6 @@
         </div>
     </div>
 
-    <!-- Material Selector Modal -->
     <div id="materialModal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header-container">
@@ -297,7 +288,6 @@
         </div>
     </div>
 
-    <!-- Share Drawer -->
     <div id="shareDrawer" class="share-drawer-overlay">
         <div class="share-container" id="shareContainer">
             <button class="share-close" id="closeShareDrawer">

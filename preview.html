@@ -147,8 +147,6 @@
             display: none;
         }
 
-        /* Responsive */
-
         @media (max-width: 1000px) {
             .main-heading-promo {
                 font-size: 2rem;
@@ -177,7 +175,6 @@
                 display: flex;
             }
 
-            /* Enable direct flex ordering for children of containers */
             .preview-ui-container {
                 display: flex;
                 flex-direction: column;
@@ -185,11 +182,11 @@
 
             .info-side {
                 order: 1;
-                display: contents; /* Allows children to be ordered relative to visual-side */
+                display: contents;
             }
 
             .main-heading-promo {
-                order: 1; /* Title at the top */
+                order: 1;
                 font-size: 1.4rem;
                 line-height: 1.3;
                 margin: 0 0 1rem;
@@ -202,14 +199,22 @@
             }
 
             .visual-side {
-                order: 2; /* Image in the middle */
+                order: 2;
                 flex: none;
                 width: 100%;
                 max-width: 360px;
-                aspect-ratio: 1 / 1.1;
+                aspect-ratio: auto;
+                height: auto;
                 border-radius: 12px;
                 margin-bottom: 0.5rem;
                 position: relative;
+            }
+
+            .visual-side img {
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+                display: block;
             }
 
             .expand-btn {
@@ -228,13 +233,13 @@
                 background-color: transparent !important;
             }
 
-            /* Lightbox Styles */
             .lightbox-overlay {
                 position: fixed;
                 top: 0;
                 left: 0;
                 width: 100vw;
                 height: 100vh;
+                height: 100dvh;
                 z-index: 10000;
                 display: none;
                 justify-content: center;
@@ -258,9 +263,9 @@
             }
 
             .lightbox-content img {
-                max-width: 100%;
-                max-height: 100%;
-                object-fit: contain;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
                 animation: zoomIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
@@ -285,12 +290,12 @@
             }
 
             .itailor-logo-badge img {
-                height: 18px; /* Scale down logo */
+                height: 18px;
                 width: auto;
             }
 
             .cta-flexbox {
-                order: 3; /* Buttons below image */
+                order: 3;
                 gap: 0.8rem;
                 width: 100%;
                 max-width: 100%;
@@ -305,14 +310,14 @@
             }
 
             .designer-signature {
-                order: 4; /* Signature below buttons */
+                order: 4;
                 font-size: 0.9rem;
                 color: rgba(255, 255, 255, 0.6) !important;
                 margin-top: 1rem;
             }
 
             .info-side svg {
-                order: 5; /* Trustpilot at the very bottom */
+                order: 5;
                 width: 140px;
                 height: auto;
                 margin-top: 1rem;
@@ -445,7 +450,7 @@
     <div id="imageLightbox" class="lightbox-overlay">
         <button id="closeLightbox" class="lightbox-close" aria-label="Close Lightbox">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M18 6L6 18M6 6L18 18" stroke="#482A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </button>
         <div class="lightbox-content">
@@ -479,7 +484,6 @@
                 }
             }
 
-            // Lightbox Logic
             const expandImageBtn = document.getElementById('expandImageBtn');
             const imageLightbox = document.getElementById('imageLightbox');
             const closeLightbox = document.getElementById('closeLightbox');
@@ -489,25 +493,23 @@
                 expandImageBtn.onclick = () => {
                     lightboxImg.src = previewImg.src;
                     imageLightbox.classList.add('active');
-                    document.body.style.overflow = 'hidden';
+                    document.body.classList.add('lightbox-active');
                 };
             }
 
             const hideLightbox = () => {
                 imageLightbox.classList.remove('active');
-                document.body.style.overflow = '';
+                document.body.classList.remove('lightbox-active');
             };
 
             if (closeLightbox) closeLightbox.onclick = hideLightbox;
 
-            // Close on escape key
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && imageLightbox.classList.contains('active')) {
                     hideLightbox();
                 }
             });
 
-            // Handle Redirection
             const designSuitBtn = document.getElementById('designSuitBtn');
             if (designSuitBtn) {
                 designSuitBtn.addEventListener('click', () => {

@@ -59,9 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadDefaultMaterial() {
         materialLoadedPromise = new Promise(async (resolve, reject) => {
             try {
-                const selectedPath = localStorage.getItem('selectedMaterialPath') || "materials/Dark Navy.jpg";
-                
-                const response = await fetch(encodeURI(selectedPath));
+                const selectedPath = "materials/Dark Navy.jpg";                
+                const response = await fetch(`${encodeURI(selectedPath)}?t=${Date.now()}`);
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 
                 const blob = await response.blob();
@@ -192,10 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('generatedLook', imagePart.inlineData.data);
             localStorage.setItem('capturedImageBase64', state.capturedImageBase64);
             localStorage.setItem('materialBase64', state.materialBase64);
-            
-            // Save the material path used for this generation
-            const usedPath = localStorage.getItem('selectedMaterialPath') || "materials/Dark Navy.jpg";
-            localStorage.setItem('selectedMaterialPath', usedPath);
+            localStorage.setItem('selectedMaterialPath', "materials/Dark Navy.jpg");
             
             window.location.href = 'result.html';
         } else {

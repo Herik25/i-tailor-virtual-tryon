@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    localStorage.setItem('selectedMaterialPath', "materials/Dark Navy.jpg");
+    localStorage.removeItem('generatedLook');
+    localStorage.removeItem('capturedImageBase64');
+    localStorage.removeItem('materialBase64');
+
     const closeBtn = document.getElementById('close-btn');
     const createBtn = document.getElementById('create-btn');
     const container = document.querySelector('.container');

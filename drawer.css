@@ -17,7 +17,6 @@
     visibility: visible;
 }
 
-/* Hidden by default, shown in mobile/tablet queries */
 .drawer-floating-preview {
     display: none;
 }
@@ -230,12 +229,12 @@
     padding: 0 5rem;
     flex: 1;
     overflow-y: auto;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .drawer-body::-webkit-scrollbar {
-    display: none; /* Webkit browsers */
+    display: none;
 }
 
 .drawer-grid-wrapper {
@@ -409,8 +408,8 @@
     .drawer-container {
         width: 100%;
         left: -100%;
-        background-image: url('modal-bg.png'); /* Maintain background if needed, or use a textured one */
-        background-color: #EDE4D3; /* A lighter base for the "parchment" look in the image */
+        background-image: url('modal-bg.png');
+        background-color: #EDE4D3;
         box-shadow: none;
     }
 
@@ -436,7 +435,7 @@
 
     .advanced-search-trigger {
         font-size: 1.1rem;
-        color: #D4AF37; /* Gold color from image */
+        color: #D4AF37;
         margin-bottom: 0.8rem;
         letter-spacing: 1px;
     }
@@ -491,10 +490,10 @@
     }
 
     .drawer-filters-section {
-        background: rgba(72, 42, 24, 0.8); /* Dark brown bar from image */
+        background: rgba(72, 42, 24, 0.8);
         padding: 0.6rem 1rem;
         gap: 1rem;
-        margin: 0 -1.5rem 0.5rem; /* Full width */
+        margin: 0 -1.5rem 0.5rem;
     }
 
     .drawer-filter-group label.white-label {
@@ -525,12 +524,12 @@
         border-radius: 4px;
         max-height: 98%;
         overflow-y: auto;
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE/Edge */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
 
     .drawer-grid-wrapper::-webkit-scrollbar {
-        display: none; /* Chrome/Safari/Webkit */
+        display: none;
     }
 
     .drawer-container .material-grid {
@@ -563,26 +562,26 @@
         left: -15px;
     }
 
-    /* Floating Preview Image - Pinned to bottom left */
     .drawer-floating-preview {
         display: block;
         position: absolute;
         bottom: 80px;
         left: -10px;
         width: 240px;
-        aspect-ratio: 1/1.5;
+        aspect-ratio: auto;
+        height: auto;
         background: #fff;
         padding: 4px;
         border-radius: 6px;
-        z-index: 2000; /* High z-index to stay on top of the grid */
-        pointer-events: none; /* Allow scrolling fabrics even if they are behind the image */
+        z-index: 2000;
+        pointer-events: none;
         animation: slideInLeft 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
 
     .drawer-floating-preview img {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: auto;
+        object-fit: contain;
         border-radius: 2px;
     }
 
@@ -605,7 +604,7 @@
     }
 
     .drawer-btn.btn-cancel {
-        background: #00BAF2; /* Cyan from image */
+        background: #00BAF2;
         color: #fff;
     }
 
@@ -616,7 +615,6 @@
     }
 }
 
-/* Tablet Optimizations (Restored & Refined) */
 @media (min-width: 769px) and (max-width: 1200px) {
     .drawer-container {
         width: 70%;
@@ -638,7 +636,8 @@
         bottom: 120px;
         left: 20px;
         width: 140px;
-        aspect-ratio: 1/1.5;
+        aspect-ratio: auto;
+        height: auto;
         background: #fff;
         padding: 5px;
         border-radius: 6px;
@@ -650,8 +649,8 @@
 
     .drawer-floating-preview img {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: auto;
+        object-fit: contain;
         border-radius: 2px;
     }
 }

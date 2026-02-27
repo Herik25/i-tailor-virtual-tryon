@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalLoader = document.getElementById('modalLoader');
     const shareLinkBtn = document.getElementById('shareLinkBtn');
 
-    // Fabric Card Elements
     const swatchImg = document.getElementById('selectedSwatchImg');
     const fabricCodeEl = document.getElementById('fabricCode');
     const fabricNameEl = document.getElementById('fabricName');
@@ -39,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
         resultImg.src = `data:image/png;base64,${generatedData}`;
     }
 
-    // Initialize Fabric Card with current material
     function updateFabricCard(material) {
         if (!material) {
             const currentPath = localStorage.getItem('selectedMaterialPath') || "materials/Dark Navy.jpg";
@@ -215,7 +213,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- Drawer Logic ---
     const fabricDrawer = document.getElementById('fabricDrawer');
     const closeDrawerBtn = document.getElementById('closeDrawer');
     const cancelDrawerBtn = document.getElementById('cancelDrawerBtn');
@@ -287,7 +284,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const drawerDrawerContainer = fabricDrawer.querySelector('.drawer-container');
 
-    // Drawer Filters Logic
     fabricDrawer.querySelectorAll('.swatch').forEach(swatch => {
         swatch.onclick = () => {
             fabricDrawer.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
@@ -401,13 +397,13 @@ document.addEventListener('DOMContentLoaded', () => {
         expandImageBtn.onclick = () => {
             lightboxImg.src = resultImg.src;
             imageLightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            document.body.classList.add('lightbox-active');
         };
     }
 
     const hideLightbox = () => {
         imageLightbox.classList.remove('active');
-        document.body.style.overflow = '';
+        document.body.classList.remove('lightbox-active');
     };
 
     if (closeLightbox) closeLightbox.onclick = hideLightbox;
