@@ -16,6 +16,37 @@ const materials = [
 
 let selectedMaterial = null;
 
+function manageLoaderSlideshow(overlay, start = true) {
+    const slideshowImages = overlay.querySelectorAll('.loader-img');
+    const loadingMsg = overlay.querySelector('.loading-msg');
+    
+    if (!start) {
+        if (overlay.slideshowInterval) clearInterval(overlay.slideshowInterval);
+        slideshowImages.forEach(img => img.classList.remove('active'));
+        if (slideshowImages.length > 0) slideshowImages[0].classList.add('active');
+        return;
+    }
+
+    if (overlay.slideshowInterval) clearInterval(overlay.slideshowInterval);
+    
+    let currentIndex = 0;
+    slideshowImages.forEach(img => img.classList.remove('active'));
+    if (slideshowImages.length > 0) {
+        slideshowImages[0].classList.add('active');
+    }
+
+    overlay.slideshowInterval = setInterval(() => {
+        if (slideshowImages.length === 0) return;
+        
+        slideshowImages[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % slideshowImages.length;
+        slideshowImages[currentIndex].classList.add('active');
+        
+        const msgs = ["Master Tailor is updating your look...", "Tailoring to Precision", "Perfecting Every Detail"];
+        if (loadingMsg) loadingMsg.textContent = msgs[currentIndex % msgs.length];
+    }, 3000); 
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const resultImg = document.getElementById('finalGeneratedImage');
     const openModalBtn = document.getElementById('open-modal-btn');
@@ -26,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const materialModal = document.getElementById('materialModal');
     const materialGrid = document.getElementById('materialGrid');
     const modalLoader = document.getElementById('modalLoader');
+    const imageResultLoader = document.getElementById('imageResultLoader');
+    const resultRight = document.querySelector('.result-right');
     const shareLinkBtn = document.getElementById('shareLinkBtn');
 
     const swatchImg = document.getElementById('selectedSwatchImg');
@@ -176,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     openModalBtn.onclick = () => {
-        window.location.href = "https://www.itailor.com/custom-suits/?fabric=3799-20";
+        window.open('https://www.itailor.com/custom-suits/?fabric=3799-20', '_blank');
     };
     tryMoreBtn.onclick = openModal;
 
@@ -196,7 +229,15 @@ document.addEventListener('DOMContentLoaded', () => {
     confirmBtn.onclick = async () => {
         if (!selectedMaterial) return;
         
+        imageResultLoader.classList.add('active');
+        manageLoaderSlideshow(imageResultLoader, true);
+        if (resultRight) resultRight.classList.add('loading-active');
+
         modalLoader.classList.add('active');
+        modalLoader.style.backgroundColor = 'transparent';
+        modalLoader.style.backdropFilter = 'none';
+        modalLoader.querySelectorAll('*').forEach(el => el.style.visibility = 'hidden');
+        
         confirmBtn.disabled = true;
 
         try {
@@ -208,7 +249,15 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(error);
             alert("Regeneration failed. Check console.");
         } finally {
+            imageResultLoader.classList.remove('active');
+            manageLoaderSlideshow(imageResultLoader, false);
+            if (resultRight) resultRight.classList.remove('loading-active');
+
             modalLoader.classList.remove('active');
+            modalLoader.style.backgroundColor = '';
+            modalLoader.style.backdropFilter = '';
+            modalLoader.querySelectorAll('*').forEach(el => el.style.visibility = '');
+            
             confirmBtn.disabled = false;
         }
     };
@@ -265,7 +314,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="material-price-overlay">${priceHtml}</div>
                 </div>
             `;
-            card.onclick = () => {
+            card.onclick = async () => {
+                if (drawerLoader.classList.contains('active')) return;
+
                 drawerMaterialGrid.querySelectorAll('.material-card').forEach(c => c.classList.remove('selected'));
                 drawerMaterialGrid.querySelectorAll('.grid-selected-badge').forEach(b => b.remove());
                 
@@ -276,7 +327,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.appendChild(badge);
                 
                 drawerSelectedMaterial = mat;
-                cancelDrawerBtn.disabled = false;
+
+                imageResultLoader.classList.add('active');
+                manageLoaderSlideshow(imageResultLoader, true);
+                if (resultRight) resultRight.classList.add('loading-active');
+                
+                drawerLoader.classList.add('active');
+                drawerLoader.style.backgroundColor = 'transparent';
+                drawerLoader.style.backdropFilter = 'none';
+                drawerLoader.querySelectorAll('*').forEach(el => el.style.visibility = 'hidden');
+
+                try {
+                    await regenerateLook(drawerSelectedMaterial);
+                    updateFabricCard(drawerSelectedMaterial);
+                    localStorage.setItem('selectedMaterialPath', drawerSelectedMaterial.file);
+                    
+                    const drawerPreviewImg = document.getElementById('drawerPreviewImg');
+                    if (drawerPreviewImg) drawerPreviewImg.src = resultImg.src;
+                } catch (error) {   
+                    console.error(error);
+                    alert("Regeneration failed.");
+                } finally {
+                    imageResultLoader.classList.remove('active');
+                    manageLoaderSlideshow(imageResultLoader, false);
+                    if (resultRight) resultRight.classList.remove('loading-active');
+                    
+                    drawerLoader.classList.remove('active');
+                    drawerLoader.style.backgroundColor = '';
+                    drawerLoader.style.backdropFilter = '';
+                    drawerLoader.querySelectorAll('*').forEach(el => el.style.visibility = '');
+                }
             };
             drawerMaterialGrid.appendChild(card);
         });
@@ -346,47 +426,25 @@ document.addEventListener('DOMContentLoaded', () => {
         drawerFiltersContainer.classList.remove('active');
         drawerAdvancedSearchToggle.classList.remove('active');
         drawerSelectedMaterial = null;
-        cancelDrawerBtn.disabled = true;
     };
 
     tryMoreBtn.onclick = openDrawer;
     closeDrawerBtn.onclick = closeDrawer;
     confirmDrawerBtn.onclick = () => {
-        // Shop Look button does nothing for now
         console.log("Shop look clicked - no action defined");
     };
 
-    cancelDrawerBtn.onclick = async () => {
-        if (!drawerSelectedMaterial) return;
-        drawerLoader.classList.add('active');
-        cancelDrawerBtn.disabled = true;
-
-        try {
-            await regenerateLook(drawerSelectedMaterial);
-            updateFabricCard(drawerSelectedMaterial);
-            localStorage.setItem('selectedMaterialPath', drawerSelectedMaterial.file);
-            const drawerPreviewImg = document.getElementById('drawerPreviewImg');
-            if (drawerPreviewImg) drawerPreviewImg.src = resultImg.src;
-            closeDrawer();
-        } catch (error) {   
-            console.error(error);
-            alert("Regeneration failed.");
-        } finally {
-            drawerLoader.classList.remove('active');
-            cancelDrawerBtn.disabled = false;
-        }
+    cancelDrawerBtn.onclick = () => {
+        window.open('https://www.itailor.com/custom-suits/?fabric=3799-20', '_blank');
     };
 
-    // --- End Drawer Logic ---
 
-    // --- Share Drawer Logic ---
     const shareDrawer = document.getElementById('shareDrawer');
     const shareContainer = document.getElementById('shareContainer');
     const closeShareDrawerBtn = document.getElementById('closeShareDrawer');
     const finalShareBtn = document.getElementById('finalShareBtn');
     const sharePreviewImg = document.getElementById('sharePreviewImg');
 
-    // --- Lightbox Logic ---
     const expandImageBtn = document.getElementById('expandImageBtn');
     const imageLightbox = document.getElementById('imageLightbox');
     const closeLightbox = document.getElementById('closeLightbox');
@@ -409,7 +467,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (closeLightbox) closeLightbox.onclick = hideLightbox;
     if (minimizeLightbox) minimizeLightbox.onclick = hideLightbox;
 
-    // Close on escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && imageLightbox.classList.contains('active')) {
             hideLightbox();
@@ -417,7 +474,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     shareLinkBtn.onclick = () => {
-        // Sync preview with current result
         sharePreviewImg.src = resultImg.src;
         
         shareDrawer.classList.add('active');
@@ -433,12 +489,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     finalShareBtn.onclick = async () => {
         try {
-            // Construct the path to preview.html in the same directory
             const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
             const shareUrl = baseUrl + 'preview.html';
             await navigator.clipboard.writeText(shareUrl);
             
-            // Premium Toast
             const tempToast = document.createElement('div');
             tempToast.className = 'toast';
             tempToast.textContent = 'LINK COPIED TO CLIPBOARD';
@@ -473,7 +527,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("Error copying link.");
         }
     };
-    // --- End Share Drawer Logic ---
 
     async function getBase64FromUrl(url) {
         const response = await fetch(url);

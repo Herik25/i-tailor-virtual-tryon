@@ -36,6 +36,21 @@
             <div class="image-frame">
                 <img id="finalGeneratedImage" src="suit-base.png" alt="Your Generated Look" class="result-image">
                 
+                <div id="imageResultLoader" class="image-loading-overlay">
+                    <div class="luxury-loader">
+                        <svg class="loader-svg" viewBox="0 0 100 100">
+                            <circle class="track" cx="50" cy="50" r="48"></circle>
+                            <circle class="luxury-ring" cx="50" cy="50" r="48"></circle>
+                        </svg>
+                        <div class="loading-slideshow">
+                            <img src="./loading/loading-1.svg" alt="Crafting" class="loader-img">
+                            <img src="./loading/loading-2.svg" alt="Tailoring" class="loader-img">
+                            <img src="./loading/loading-3.svg" alt="Perfecting" class="loader-img">
+                        </div>
+                    </div>
+                    <p class="loading-msg">Master Tailor is updating your look...</p>
+                </div>
+                
                 <button id="shareLinkBtn" class="share-icon-btn" aria-label="Share">
                     <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g opacity="0.6">
@@ -184,12 +199,22 @@
             
             <div class="drawer-footer">
                 <button class="drawer-btn btn-cancel" id="confirmDrawerBtn">SHOP THIS LOOK</button>
-                <button class="drawer-btn btn-confirm" id="cancelDrawerBtn" disabled>CUSTOMIZE THIS SUIT</button>
+                <button class="drawer-btn btn-confirm" id="cancelDrawerBtn">CUSTOMIZE THIS SUIT</button>
             </div>
             
             <div id="drawerLoader" class="drawer-loading-overlay">
-                <div class="spinner"></div>
-                <p>Master Tailor is updating your look...</p>
+                <div class="luxury-loader">
+                    <svg class="loader-svg" viewBox="0 0 100 100">
+                        <circle class="track" cx="50" cy="50" r="48"></circle>
+                        <circle class="luxury-ring" cx="50" cy="50" r="48"></circle>
+                    </svg>
+                    <div class="loading-slideshow">
+                        <img src="./loading/loading-1.svg" alt="Crafting" class="loader-img">
+                        <img src="./loading/loading-2.svg" alt="Tailoring" class="loader-img">
+                        <img src="./loading/loading-3.svg" alt="Perfecting" class="loader-img">
+                    </div>
+                </div>
+                <p class="loading-msg">Master Tailor is updating your look...</p>
             </div>
         </div>
     </div>
@@ -282,8 +307,18 @@
             </div>
             
             <div id="modalLoader" class="modal-loading-overlay">
-                <div class="spinner"></div>
-                <p>Master Tailor is updating your look...</p>
+                <div class="luxury-loader">
+                    <svg class="loader-svg" viewBox="0 0 100 100">
+                        <circle class="track" cx="50" cy="50" r="48"></circle>
+                        <circle class="luxury-ring" cx="50" cy="50" r="48"></circle>
+                    </svg>
+                    <div class="loading-slideshow">
+                        <img src="./loading/loading-1.svg" alt="Crafting" class="loader-img">
+                        <img src="./loading/loading-2.svg" alt="Tailoring" class="loader-img">
+                        <img src="./loading/loading-3.svg" alt="Perfecting" class="loader-img">
+                    </div>
+                </div>
+                <p class="loading-msg">Master Tailor is updating your look...</p>
             </div>
         </div>
     </div>
